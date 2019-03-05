@@ -36,7 +36,10 @@ NULL
 #'
 #' @examples
 #' region <- GRanges("chr12:110938000-110940000")
-#' setwd(system.file("extdata", package = "RepViz"))
+#'
+#' #Copying the files in the curent user working directory for the purpose of the example
+#' file.copy(from = list.files(system.file("extdata", package = "RepViz"), full.names = TRUE),
+#'           to = getwd())
 #' RepViz::RepViz(region = region,
 #'                genome = "hg19",
 #'                BAM = "BAM_input.csv",
@@ -55,7 +58,7 @@ RepViz <- function(region,genome,BAM=NULL,BED=NULL,avgTrack=TRUE,geneTrack=TRUE,
   #ploting the coverages
   mat <- defineLayout(object_holder,geneTrack,avgTrack)
   layout(mat,widths=c(5,1))
-  graphics::par(mar=c(2, 4, 1, 1))
+  graphics::par(mar=c(2, 4, 1, 0))
   if(!is.null(BAM)){
     if(verbose == TRUE){
       cat("plotting the coverages \n")
@@ -93,15 +96,16 @@ RepViz <- function(region,genome,BAM=NULL,BED=NULL,avgTrack=TRUE,geneTrack=TRUE,
     gr <- findGenes(region,bm)
     plotGenomicTrack(gr = gr,UTR3 = UTR3, UTR5 = UTR5,region)
   }
+  graphics::par(mar=c(1, 1, 1, 1))
   graphics::plot.new()
-  legend("center",legend = 1:replicatesNumber(object_holder), col = colorsPalette[[1]],lty=1,lwd = 2,box.col = "white",bg = "white")
+  legend("left",legend = 1:replicatesNumber(object_holder), col = colorsPalette[[1]],lty=1,lwd = 2,box.col = "white",bg = "white")
   if(avgTrack){
     graphics::plot.new()
-    graphics::legend("center",legend = unique(object_holder$BAM$condition), col = colorsPalette[[2]][2:length(colorsPalette[[2]])] ,lty=1,lwd = 2,box.col = "white",bg = "white")
+    graphics::legend("left",legend = unique(object_holder$BAM$condition), col = colorsPalette[[2]][2:length(colorsPalette[[2]])] ,lty=1,lwd = 2,box.col = "white",bg = "white")
   }
   if(!is.null(BED)){
     graphics::plot.new()
-    graphics::legend("center",legend = rev(object_holder$BED$software), col = rev(colorsPalette[[3]][1:length(object_holder$BED$software)]),lty=1,lwd = 2,box.col = "white",bg = "white")
+    graphics::legend("left",legend = rev(object_holder$BED$software), col = rev(colorsPalette[[3]][1:length(object_holder$BED$software)]),lty=1,lwd = 2,box.col = "white",bg = "white")
   }
 
   graphics::par(mfrow=c(1,1))

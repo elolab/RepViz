@@ -29,7 +29,10 @@ Plot a genomic region
 }
 \examples{
 region <- GRanges("chr12:110938000-110940000")
-setwd(system.file("extdata", package = "RepViz"))
+
+#Copying the files in the curent user working directory for the purpose of the example
+file.copy(from = list.files(system.file("extdata", package = "RepViz"), full.names = TRUE),
+          to = getwd())
 RepViz::RepViz(region = region,
                genome = "hg19",
                BAM = "BAM_input.csv",

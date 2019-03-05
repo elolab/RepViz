@@ -54,7 +54,7 @@ Once the CSV input files are ready you need to declare the region that will be d
 suppressMessages(library(GenomicRanges))
 ```
 
-```{r plot,fig.height=10,fig.width=9,fig.align='center'}
+```{r plot,fig.height=10,fig.width=7}
 region <- GRanges("chr12:110938000-110940000")
 RepViz::RepViz(region = region,
                genome = "hg19",

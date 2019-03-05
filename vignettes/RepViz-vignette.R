@@ -1,5 +1,7 @@
 ## ----setup, include=FALSE------------------------------------------------
+library(knitr)
 knitr::opts_chunk$set(echo = TRUE)
+opts_knit$set(root.dir = system.file("extdata", package = "RepViz"))
 
 ## ----input BAM-----------------------------------------------------------
 BAM_table <- read.table(system.file("extdata","BAM_input.csv", package = "RepViz"), sep = ";")
@@ -17,10 +19,8 @@ list.files(system.file("extdata", package = "RepViz"),pattern = ".bam")
 ## ----GRanges, echo=FALSE,prompt=FALSE------------------------------------
 suppressMessages(library(GenomicRanges))
 
-## ----plot,fig.height=8,fig.width=10,fig.align='center'-------------------
+## ----plot,fig.height=10,fig.width=7,fig.align='center'-------------------
 region <- GRanges("chr12:110938000-110940000")
-backup <- getwd()
-setwd(system.file("extdata", package = "RepViz"))
 RepViz::RepViz(region = region,
                genome = "hg19",
                BAM = "BAM_input.csv",
@@ -30,7 +30,4 @@ RepViz::RepViz(region = region,
 
 
 
-
-## ----backup--------------------------------------------------------------
-setwd(backup)
 

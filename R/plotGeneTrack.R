@@ -337,7 +337,7 @@ plotGRanges <- function(gr,region,y,UTR3,UTR5){
       GenomicRanges::end(gr[queryHits(GenomicRanges::findOverlaps(gr,UTR5))]) <- GenomicRanges::start(UTR5[subjectHits(GenomicRanges::findOverlaps(gr,UTR5))])
     }
     if(as.character(unique(strand(gr))) == "+"){
-      GenomicRanges::start(gr[queryHits(GenomicRanges::findOverlaps(gr,UTR5))]) <- GenomicRanges::end(UTR[subjectHits(GenomicRanges::findOverlaps(gr,UTR5))])
+      GenomicRanges::start(gr[queryHits(GenomicRanges::findOverlaps(gr,UTR5))]) <- GenomicRanges::end(UTR5[subjectHits(GenomicRanges::findOverlaps(gr,UTR5))])
     }
   }
   if(length(UTR3) > 0){

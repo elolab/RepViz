@@ -11,7 +11,9 @@ vignette: >
 ---
 
 ```{r setup, include=FALSE}
+library(knitr)
 knitr::opts_chunk$set(echo = TRUE)
+opts_knit$set(root.dir = system.file("extdata", package = "RepViz"))
 ```
 
 ## Introduction
@@ -51,10 +53,9 @@ Once the CSV input files are ready you need to declare the region that will be d
 ```{r GRanges, echo=FALSE,prompt=FALSE}
 suppressMessages(library(GenomicRanges))
 ```
-```{r plot,fig.height=10,fig.width=12}
+
+```{r plot,fig.height=10,fig.width=9,fig.align='center'}
 region <- GRanges("chr12:110938000-110940000")
-backup <- getwd()
-setwd(system.file("extdata", package = "RepViz"))
 RepViz::RepViz(region = region,
                genome = "hg19",
                BAM = "BAM_input.csv",
@@ -64,9 +65,4 @@ RepViz::RepViz(region = region,
 
 
 
-```
-
-This line sets the working directory back in his original place
-```{r backup}
-setwd(backup)
 ```

@@ -17,7 +17,7 @@ list.files(system.file("extdata", package = "RepViz"),pattern = ".bam")
 ## ----GRanges, echo=FALSE,prompt=FALSE------------------------------------
 suppressMessages(library(GenomicRanges))
 
-## ----plot,fig.height=10,fig.width=12-------------------------------------
+## ----plot,fig.height=8,fig.width=10,fig.align='center'-------------------
 region <- GRanges("chr12:110938000-110940000")
 backup <- getwd()
 setwd(system.file("extdata", package = "RepViz"))

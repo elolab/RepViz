@@ -28,7 +28,7 @@ RepViz(region, genome, BAM = NULL, BED = NULL, avgTrack = TRUE,
 Plot a genomic region
 }
 \examples{
-region <- GRanges("chr12:110938000-110940000")169940220..170023770
+region <- GRanges("chr12:110938000-110940000")
 setwd(system.file("extdata", package = "RepViz"))
 RepViz::RepViz(region = region,
                genome = "hg19",

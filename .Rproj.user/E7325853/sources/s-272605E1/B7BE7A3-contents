@@ -1,0 +1,34 @@
+
+devtools::document()
+devtools::check("RepViz")
+devtools::build(".",binary = TRUE)
+setwd("Desktop/")
+install.packages("../RepViz_0.1.12.tgz",repos = NULL)
+setwd("~/Library/Group Containers/G69SCX94XU.duck/Library/Application Support/duck/Volumes/root-2/rnaseq_epigenomics/ceph/B18070_Differential_ChIPseq_peak_calling/vizSeq")
+system("R CMD Rd2pdf . --title=Package RepViz --output=./RepViz-manual.pdf --force --no-clean --internals")
+
+install.packages("../RepViz_0.1.12.tgz",repos = NULL,type="source")
+library(GenomicRanges)
+region <- GRanges("chr12:110938000-110940000")
+backup <- getwd()
+setwd(system.file("extdata", package = "RepViz"))
+RepViz::RepViz(region = region,
+               genome = "hg19",
+               BAM = "BAM_input.csv",
+               BED = "BED_input.csv",
+               avgTrack = T,
+               geneTrack = T)
+setwd(backup)
+
+
+
+
+
+region <- GRanges("chr17:48261457-48279003")
+RepViz::RepViz(region = region,
+               genome = "hg19",
+               BAM = "BAM_input.csv",
+               BED = "BED_input.csv",
+               avgTrack = F,
+               geneTrack = T)
+

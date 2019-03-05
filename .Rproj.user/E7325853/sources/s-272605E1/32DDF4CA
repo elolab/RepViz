@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1551269120848.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "32DDF4CA",
+    "lastKnownWriteTime" : 1551775047,
+    "last_content_update" : 1551775047184,
+    "path" : "~/Desktop/RepViz/R/plotGeneTrack.R",
+    "project_path" : "R/plotGeneTrack.R",
+    "properties" : {
+        "cursorPosition" : "386,0",
+        "scrollLine" : "354"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

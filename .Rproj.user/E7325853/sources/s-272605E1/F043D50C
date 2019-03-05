@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1551687842174.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "F043D50C",
+    "lastKnownWriteTime" : 1550500379,
+    "last_content_update" : 1550500379,
+    "path" : "~/Desktop/RepViz/R/plotBED.R",
+    "project_path" : "R/plotBED.R",
+    "properties" : {
+        "cursorPosition" : "117,0",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

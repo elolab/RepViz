@@ -133,13 +133,13 @@ createDataObject <- function(BAM=NULL, BED=NULL){
 
   if(!is.null(BAM)){
     cat(paste0("loading the BAM related data from ",BAM , "\n"))
-    files <- utils::read.table(file =BAM ,sep = ";",colClasses = c("character","numeric","character"))
+    files <- utils::read.table(file =BAM ,sep = ",",colClasses = c("character","numeric","character"))
     colnames(files) <- c("files","group","condition")
     return_object$BAM <- files
   }
   if(!is.null(BED)){
     cat(paste0("loading the BED related data from ",BED ,"\n"))
-    files <- utils::read.table(file =BED ,sep = ";",colClasses = c("character","character"))
+    files <- utils::read.table(file =BED ,sep = ",",colClasses = c("character","character"))
     colnames(files) <- c("files","software")
     return_object$BED <- files
   }

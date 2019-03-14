@@ -68,14 +68,15 @@ RepViz <- function(region,genome,BAM=NULL,BED=NULL,avgTrack=TRUE,geneTrack=TRUE,
     coverages <- makeCoverages(coord,layout)
 
     if(is.null(max)){
-      max <- rep(max(unlist(coverages)),max(unique(as.numeric(object_holder$BAM$group))))
+      max <- rep(max(unlist(coverages)),length(unique(object_holder$BAM$group)))
     }
-    for(group in 1:max(unique(as.numeric(object_holder$BAM$group)))){
 
-      plotBAM(coord,coverages[[group]],max[group],unique(object_holder$BAM$condition)[group],colorsPalette[[1]])
+    for(group in 1:length(unique(object_holder$BAM$group))){
+
+      plotBAM(coord,coverages[[group]],max[group],unique(object_holder$BAM$group)[group],colorsPalette[[1]])
     }
     if(avgTrack == TRUE){
-      plotAverageBAM(coord,coverages,unique(object_holder$BAM$condition),colorsPalette[[2]])
+      plotAverageBAM(coord,coverages,unique(object_holder$BAM$group),colorsPalette[[2]])
     }
 
   }
@@ -101,7 +102,7 @@ RepViz <- function(region,genome,BAM=NULL,BED=NULL,avgTrack=TRUE,geneTrack=TRUE,
   legend("left",legend = 1:replicatesNumber(object_holder), col = colorsPalette[[1]],lty=1,lwd = 2,box.col = "white",bg = "white")
   if(avgTrack){
     graphics::plot.new()
-    graphics::legend("left",legend = unique(object_holder$BAM$condition), col = colorsPalette[[2]][2:length(colorsPalette[[2]])] ,lty=1,lwd = 2,box.col = "white",bg = "white")
+    graphics::legend("left",legend = unique(object_holder$BAM$group), col = colorsPalette[[2]][2:length(colorsPalette[[2]])] ,lty=1,lwd = 2,box.col = "white",bg = "white")
   }
   if(!is.null(BED)){
     graphics::plot.new()
@@ -133,8 +134,8 @@ createDataObject <- function(BAM=NULL, BED=NULL){
 
   if(!is.null(BAM)){
     cat(paste0("loading the BAM related data from ",BAM , "\n"))
-    files <- utils::read.table(file =BAM ,sep = ",",colClasses = c("character","numeric","character"))
-    colnames(files) <- c("files","group","condition")
+    files <- utils::read.table(file =BAM ,sep = ",",colClasses = c("character","character"))
+    colnames(files) <- c("files","group")
     return_object$BAM <- files
   }
   if(!is.null(BED)){
@@ -184,7 +185,7 @@ defineColorPalettes <- function(object){
   if("BAM" %in% names(object)){
     nbrep <- replicatesNumber(object)
     BAM <- gg_color_hue(nbrep)
-    BAMavg <- gg_color_hue(max(unique(object$BAM$group))+1,0.5)
+    BAMavg <- gg_color_hue(length(unique(object$BAM$group))+1,0.5)
   }
   else{
     BAM<-NULL
@@ -219,7 +220,7 @@ defineColorPalettes <- function(object){
 ## returns a matrix to input in the layout function
 ############################################################################################################################################
 defineLayout <- function(object_holder,geneTrack,avgTrack){
-  groups <- max(unique(object_holder$BAM$group))
+  groups <- length(unique(object_holder$BAM$group))
   if(geneTrack){
     mat <- matrix(c(1:(groups+1),groups+2,groups+3,rep(x=groups+4,groups),groups+5,groups+6,groups+7), groups+3, 2, byrow = FALSE)
   }
@@ -278,7 +279,7 @@ replicatesNumber <- function(object_holder){
   groupnb <- unique(object_holder$BAM$group)
 
   vec <- c()
-  for(i in 1:max(groupnb)){
+  for(i in groupnb){
     len <- dim(object_holder$BAM[which(object_holder$BAM$group == i),])[1]
     vec <- c(vec,len)
   }

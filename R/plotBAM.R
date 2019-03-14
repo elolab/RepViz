@@ -110,7 +110,7 @@ coverageGenomicRegion <- function(coord,reader){
 makeBAMLayout <- function(BAM,region){
   return_object <- list()
 
-  for(i in 1:max(unique(as.numeric(BAM$group)))){
+  for(i in unique(BAM$group)){
     return_object[[i]] <-BAM[which(BAM$group == i),"files"]
   }
   return(return_object)

@@ -51,7 +51,7 @@ NULL
 RepViz <- function(region,genome,BAM=NULL,BED=NULL,avgTrack=TRUE,geneTrack=TRUE,max=NULL,verbose=TRUE){
 
   #loading the files
-  object_holder <- createDataObject(BAM=BAM,BED=BED)
+  object_holder <- createDataObject(BAM=BAM,BED=BED,verbose=verbose)
   plots_list <- list()
   unitTest(object_holder)
   colorsPalette <- defineColorPalettes(object_holder)
@@ -128,18 +128,22 @@ RepViz <- function(region,genome,BAM=NULL,BED=NULL,avgTrack=TRUE,geneTrack=TRUE,
 ##
 ## returns an object containing the info in the csv files
 ############################################################################################################################################
-createDataObject <- function(BAM=NULL, BED=NULL){
+createDataObject <- function(BAM=NULL, BED=NULL, verbose=TRUE){
   #takes into input the pah of the file with the bam and bed
   return_object <- list()
 
   if(!is.null(BAM)){
-    cat(paste0("loading the BAM related data from ",BAM , "\n"))
+    if(verbose==TRUE){
+      cat(paste0("loading the BAM related data from ",BAM , "\n"))
+    }
     files <- utils::read.table(file =BAM ,sep = ",",colClasses = c("character","character"))
     colnames(files) <- c("files","group")
     return_object$BAM <- files
   }
   if(!is.null(BED)){
-    cat(paste0("loading the BED related data from ",BED ,"\n"))
+    if(verbose==TRUE){
+      cat(paste0("loading the BED related data from ",BED ,"\n"))
+    }
     files <- utils::read.table(file =BED ,sep = ",",colClasses = c("character","character"))
     colnames(files) <- c("files","software")
     return_object$BED <- files

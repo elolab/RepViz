@@ -18,27 +18,27 @@ opts_knit$set(root.dir = system.file("extdata", package = "RepViz"))
 
 ## Introduction
 
-DNA sequencing has become an essential part of biomedicine and biology. Commonly, the data are analyzed with automatized pipelines. However, a visual inspection by a researcher is often useful both at the level of basic quality control and as a confirmation of the analysis results. Efficient visualization often has an essential role also in guiding the analysis design and interpretation of the results.
-In an effort to reduce the amount of data in the visualization output and to optimize the information for the user, we have developed a replicate driven tool, RepViz, which enables to view a genomic region in a simple and efficient way. RepViz allows simultaneous viewing of both intra- and intergroup variation in sequencing counts of the studied conditions, as well as their comparison to the output features (e.g. identified peaks) from user selected data analysis methods. The RepViz tool is primarily designed for chromatin data such as ChIP-seq and ATAC-seq, but can also be used with other sequencing data such as RNA-seq, or combinations of different types of genomic data.
+DNA sequencing has become an essential part of biomedicine and biology. Commonly, the data are analyzed with automatized pipelines. However, a visual inspection by a researcher is often useful both at the level of basic quality control and as a confirmation of the analysis results. Efficient visualization also often has an essential role in guiding the analysis design and interpretation of the results.
+In an effort to provide a simple and efficient visualization of genomic regions for the user, we have developed a replicate driven tool, RepViz. RepViz allows simultaneous viewing of both intra- and intergroup variation in sequencing counts of the studied conditions, as well as their comparison to the output features (e.g. identified peaks) from user selected data analysis methods. The RepViz tool is primarily designed for chromatin data such as ChIP-seq and ATAC-seq, but can also be used with other sequencing data such as RNA-seq, or combinations of different types of genomic data.
 
 ## Before starting
 
-Before executing the commends, it will be necessary to load the exemple files in your working directory with this commend:
+Before executing the commands, it will be necessary to copy the example files to your working directory with this commend:
 ```{r download BAM,eval = FALSE}
 file.copy(from = list.files(system.file("extdata", package = "RepViz"), full.names = TRUE),to = getwd())
 ```
 ## The input files
 
-The tool takes two CSV files as an input. These CSV files are contains the paths to the different files needed for RepViz.One of the CSV file containes the file paths to the BAM files and organises them by group and the second CSV file gives the file paths of the BED files. You can see below an exemple of the BAM_input.csv containing three columns, the path to the BAM files, the group number and the group names.  
+The tool takes two CSV files as an input. These CSV files contain the paths to the different files needed for RepViz. The first CSV file contains the file paths to the BAM files and the information about group name. The second CSV file contains the file paths to the BED files. Below is an example of a BAM input file  BAM_input.csv containing two columns, the path to the BAM files and the group name.  
 
 ### The BAM input file:
 ```{r input BAM, echo=FALSE}
 BAM_table <- read.table(system.file("extdata","BAM_input.csv", package = "RepViz"), sep = ",")
-colnames(BAM_table) <- c("bam file","group","group name")
+colnames(BAM_table) <- c("bam file","group")
 knitr::kable(BAM_table)
 ```
 
-You can see below an exemple of the BED_input.csv containing two columns, the path to the BED files and the name that will appear in the legend. For the purpose of this exemple the file contains only one line, but it is meant to contain multiple lines.
+Below is  an example of the BED_input.csv containing two columns; the path to the BED file and the name that will appear in the legend. For the purpose of this example the file contains only one line, but it can contain multiple lines.
 
 ### The BED input file
 ```{r input BED, echo=FALSE}
@@ -47,7 +47,7 @@ colnames(BED_table) <- c("bed file","Legend")
 knitr::kable(BED_table)
 ```
 
-Note that the corresponding BAI files needs to be present in the same folder with the BAM files 
+A BAI file is the index file of the BAM file. It takes the same name as a BAM file with an added suffix ".bai". Note that the corresponding BAI files need to be present in the same folder with the BAM files 
 
 ```{r bam files, echo=FALSE}
 list.files(system.file("extdata", package = "RepViz"),pattern = ".bam")
@@ -55,7 +55,7 @@ list.files(system.file("extdata", package = "RepViz"),pattern = ".bam")
 
 ## The plotting function
 
-Once the CSV input files are ready you need to declare the region that will be drawn. For this exemple we are using the region in the vicinity of the VPS29 gene. The library GenomicRanges will be used to create a GRanges object containing the region. The genome needs to be specified in order to have the genomic track matching your other tracks (BAM, BED). The genomes that are currently implemented are hg19, hg38 and mm10. The arguments avgTrack and geneTrack are logical and enable you to control whether the gene track and average track are plotted or not.
+Once the CSV input files are ready, the user needs to declare the region that will be visualized together with the genome matching the BAM and BED files. For this example we are using the region in the vicinity of the VPS29 gene. The genomes that are currently implemented are hg19, hg38 and mm10. The avgTrack and geneTrack logicals enable you to control whether the gene track and average track are plotted or not.
 
 ```{r GRanges, echo=FALSE,prompt=FALSE}
 suppressMessages(library(GenomicRanges))
@@ -68,8 +68,11 @@ RepViz::RepViz(region = region,
                BAM = "BAM_input.csv",
                BED = "BED_input.csv",
                avgTrack = T,
-               geneTrack = T)
+               geneTrack = T,
+               verbose = F)
 
 
 
 ```
+
+Above is the output of the visualization. The two first boxes starting from the top part are showing the different replicates separated by group name (the number of boxes depends on the number of groups). The following box shows the group averages. The second to last box visualizes the genomic regions present in the BED file. The last box is the genomic track.

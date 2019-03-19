@@ -29,17 +29,18 @@ NULL
 #' @param genome a character vector "hg19","hg38" or "mm10"
 #' @param BAM a path to the BAM related csv input file
 #' @param BED a path to the BED related csv input file
-#' @param avgTrack a logical indicating if the average track should be present or not
-#' @param geneTrack a logical indicating if the gene track should be present or not
-#' @param max a vector of numbers containing the yaxis maximum value of each BAM track
-#' @param verbose prompt the progress of the plotting
+#' @param avgTrack a logical indicating if the average track should be included or not
+#' @param geneTrack a logical indicating if the gene track should be included or not
+#' @param max a numerical vector containing the yaxis maximum value of each BAM track
+#' @param verbose a logical indicating whether the progress of the plotting is shown
 #'
 #' @examples
 #' region <- GRanges("chr12:110938000-110940000")
 #'
-#' #Copying the files in the curent user working directory for the purpose of the example
+#' #Copying the files to the user working directory
 #' file.copy(from = list.files(system.file("extdata", package = "RepViz"), full.names = TRUE),
 #'           to = getwd())
+#' #Generate the visualization of the given region
 #' RepViz::RepViz(region = region,
 #'                genome = "hg19",
 #'                BAM = "BAM_input.csv",

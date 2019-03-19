@@ -16,13 +16,13 @@ RepViz(region, genome, BAM = NULL, BED = NULL, avgTrack = TRUE,
 
 \item{BED}{a path to the BED related csv input file}
 
-\item{avgTrack}{a logical indicating if the average track should be present or not}
+\item{avgTrack}{a logical indicating if the average track should be included or not}
 
-\item{geneTrack}{a logical indicating if the gene track should be present or not}
+\item{geneTrack}{a logical indicating if the gene track should be included or not}
 
-\item{max}{a vector of numbers containing the yaxis maximum value of each BAM track}
+\item{max}{a numerical vector containing the yaxis maximum value of each BAM track}
 
-\item{verbose}{prompt the progress of the plotting}
+\item{verbose}{a logical indicating whether the progress of the plotting is shown}
 }
 \description{
 Plot a genomic region
@@ -30,9 +30,10 @@ Plot a genomic region
 \examples{
 region <- GRanges("chr12:110938000-110940000")
 
-#Copying the files in the curent user working directory for the purpose of the example
+#Copying the files to the user working directory
 file.copy(from = list.files(system.file("extdata", package = "RepViz"), full.names = TRUE),
           to = getwd())
+#Generate the visualization of the given region
 RepViz::RepViz(region = region,
                genome = "hg19",
                BAM = "BAM_input.csv",

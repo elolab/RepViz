@@ -10,7 +10,7 @@ RepViz(region, genome, BAM = NULL, BED = NULL, avgTrack = TRUE,
 \arguments{
 \item{region}{a GRange object with chr, start, end}
 
-\item{genome}{a character vector "hg19","hg38" or "mm10"}
+\item{genome}{a character vector 'hg19','hg38' or 'mm10'}
 
 \item{BAM}{a path to the BAM related csv input file}
 
@@ -28,16 +28,16 @@ RepViz(region, genome, BAM = NULL, BED = NULL, avgTrack = TRUE,
 Plot a genomic region
 }
 \examples{
-region <- GRanges("chr12:110938000-110940000")
+region <- GRanges('chr12:110938000-110940000')
 
 #Copying the files to the user working directory
-file.copy(from = list.files(system.file("extdata", package = "RepViz"), full.names = TRUE),
+file.copy(from = list.files(system.file('extdata', package = 'RepViz'), full.names = TRUE),
           to = getwd())
 #Generate the visualization of the given region
 RepViz::RepViz(region = region,
-               genome = "hg19",
-               BAM = "BAM_input.csv",
-               BED = "BED_input.csv",
+               genome = 'hg19',
+               BAM = 'BAM_input.csv',
+               BED = 'BED_input.csv',
                avgTrack = TRUE,
                geneTrack = TRUE)
 

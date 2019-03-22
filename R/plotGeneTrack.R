@@ -56,9 +56,14 @@ findGenes <- function(region, m) {
     filters <- c("chromosome_name", "start", "end")
     chr <- substr(as.character(seqnames(region)), 4, nchar(as.character(seqnames(region))))
     values <- list(chr, GenomicRanges::start(region), GenomicRanges::end(region))
-    map <- biomaRt::getBM(mart = m, attributes = c("ensembl_gene_id", "external_gene_name", "ensembl_exon_id",
-        "chromosome_name", "exon_chrom_start", "exon_chrom_end", "strand"), filters = filters,
-        values = values)
+    map <- biomaRt::getBM(mart = m, attributes = c("ensembl_gene_id",
+                                                     "external_gene_name",
+                                                     "ensembl_exon_id",
+                                                     "chromosome_name",
+                                                     "exon_chrom_start",
+                                                     "exon_chrom_end",
+                                                     "strand"), filters = filters,
+                                                     values = values)
 
     map[which(map$strand == -1), "strand"] <- "-"
     map[which(map$strand == 1), "strand"] <- "+"
@@ -147,12 +152,15 @@ findUTR3 <- function(region, m) {
 getBiomaRt <- function(region, genome = c("hg19", "GRCh38", "mm10")) {
 
     if (genome == "hg19") {
-        m <- biomaRt::useMart(biomart = "ENSEMBL_MART_ENSEMBL", host = "grch37.ensembl.org", path = "/biomart/martservice",
-            dataset = "hsapiens_gene_ensembl")
+        m <- biomaRt::useMart(biomart = "ENSEMBL_MART_ENSEMBL",
+                               host = "grch37.ensembl.org", path = "/biomart/martservice",
+                               dataset = "hsapiens_gene_ensembl")
     }
+
     if (genome == "GRCh38") {
-        m <- biomaRt::useMart(biomart = "ENSEMBL_MART_ENSEMBL", host = "grch38.ensembl.org", path = "/biomart/martservice",
-            dataset = "hsapiens_gene_ensembl")
+        m <- biomaRt::useMart(biomart = "ENSEMBL_MART_ENSEMBL",
+                               host = "grch38.ensembl.org", path = "/biomart/martservice",
+                               dataset = "hsapiens_gene_ensembl")
     }
     if (genome == "mm10") {
         m <- biomaRt::useMart("ensembl", dataset = "mmusculus_gene_ensembl")
@@ -228,23 +236,31 @@ plotGRanges <- function(gr, region, y, UTR3, UTR5) {
     if (length(UTR5) > 0) {
         plotRectangles(region, UTR5, y, size = 0.25)
         if (as.character(unique(strand(gr))) == "-") {
-            GenomicRanges::end(gr[queryHits(GenomicRanges::findOverlaps(gr, UTR5))]) <- GenomicRanges::start(UTR5[subjectHits(GenomicRanges::findOverlaps(gr,
-                UTR5))])
+            GenomicRanges::end(
+               gr[queryHits(GenomicRanges::findOverlaps(gr, UTR5))]
+               ) <- GenomicRanges::start(
+                    UTR5[subjectHits(GenomicRanges::findOverlaps(gr,UTR5))])
         }
         if (as.character(unique(strand(gr))) == "+") {
-            GenomicRanges::start(gr[queryHits(GenomicRanges::findOverlaps(gr, UTR5))]) <- GenomicRanges::end(UTR5[subjectHits(GenomicRanges::findOverlaps(gr,
-                UTR5))])
+            GenomicRanges::start(
+               gr[queryHits(GenomicRanges::findOverlaps(gr, UTR5))]
+               ) <- GenomicRanges::end(
+                    UTR5[subjectHits(GenomicRanges::findOverlaps(gr,UTR5))])
         }
     }
     if (length(UTR3) > 0) {
         plotRectangles(region, UTR3, y, size = 0.25)
         if (as.character(unique(strand(gr))) == "+") {
-            GenomicRanges::end(gr[queryHits(GenomicRanges::findOverlaps(gr, UTR3))]) <- GenomicRanges::start(UTR3[subjectHits(GenomicRanges::findOverlaps(gr,
-                UTR3))])
+            GenomicRanges::end(
+               gr[queryHits(GenomicRanges::findOverlaps(gr, UTR3))]
+               ) <- GenomicRanges::start(
+                    UTR3[subjectHits(GenomicRanges::findOverlaps(gr,UTR3))])
         }
         if (as.character(unique(strand(gr))) == "-") {
-            GenomicRanges::start(gr[queryHits(GenomicRanges::findOverlaps(gr, UTR3))]) <- GenomicRanges::end(UTR3[subjectHits(GenomicRanges::findOverlaps(gr,
-                UTR3))])
+            GenomicRanges::start(
+               gr[queryHits(GenomicRanges::findOverlaps(gr, UTR3))]
+               ) <- GenomicRanges::end(
+                    UTR3[subjectHits(GenomicRanges::findOverlaps(gr,UTR3))])
         }
     }
     plotRectangles(region, gr, y, size = 0.5)
@@ -280,14 +296,18 @@ plotGenomicTrack <- function(gr, UTR3, UTR5, region) {
     if (dim(as.data.frame(gr))[1] > 0) {
         index <- 0
         if (length(unique(gr$external_gene_name)) == 1) {
-            graphics::plot(x = 1, ylim = c(0, 2), xlim = c(GenomicRanges::start(region), GenomicRanges::end(region)),
-                xlab = GenomicRanges::seqnames(region), yaxt = "n", ylab = "", xaxt = "n")
+            graphics::plot(x = 1, ylim = c(0, 2),
+                xlim = c(GenomicRanges::start(region),
+                GenomicRanges::end(region)),
+                xlab = GenomicRanges::seqnames(region), yaxt = "n", ylab = "",
+                xaxt = "n")
             graphics::axis(2, at = 1, unique(gr$external_gene_name), srt = 45)
             plotGRanges(gr, region, 1, UTR3, UTR5)
         }
         if (length(unique(gr$external_gene_name)) > 1) {
-            graphics::plot(x = 1, ylim = c(0, length(unique(gr$external_gene_name))), xlim = c(start(region),
-                end(region)), xlab = seqnames(region), yaxt = "n", ylab = "")
+            graphics::plot(x = 1, ylim = c(0, length(unique(gr$external_gene_name))),
+                xlim = c(start(region), end(region)), xlab = seqnames(region),
+                yaxt = "n", ylab = "")
             tmin <- 1
             tmax <- length(IRanges::unique(gr$external_gene_name))
             tlab <- seq(tmin, tmax) - 0.5

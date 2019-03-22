@@ -14,8 +14,9 @@ plotBED <- function(BED, region, colorPalette, verbose) {
 
     overlaps <- takePeaksOverlap(BED, region, verbose)
     mysegment <- function(GRanges, y, colorPalette) {
-        graphics::segments(x0 = GenomicRanges::start(GRanges[[1]]), y0 = y - 0.5, x1 = GenomicRanges::end(GRanges[[1]]),
-            y1 = y - 0.5, col = colorPalette[y], lwd = 6)
+        graphics::segments(x0 = GenomicRanges::start(GRanges[[1]]), y0 = y - 0.5,
+                        x1 = GenomicRanges::end(GRanges[[1]]),
+                        y1 = y - 0.5, col = colorPalette[y], lwd = 6)
     }
 
     graphics::plot(x = 1, ylim = c(0, length(overlaps)), xlim = c(GenomicRanges::start(region),

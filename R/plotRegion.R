@@ -92,23 +92,29 @@ RepViz <- function(region, genome, BAM = NULL, BED = NULL, avgTrack = TRUE, gene
     }
     graphics::par(mar = c(1, 1, 1, 1))
     graphics::plot.new()
-    legend("left", legend = seq_len(replicatesNumber(object_holder)), col = colorsPalette[[1]],
-        lty = 1, lwd = 2, box.col = "white", bg = "white")
-    if (avgTrack) {
-        graphics::plot.new()
-        graphics::legend("left", legend = unique(object_holder$BAM$group), col = colorsPalette[[2]][2:length(colorsPalette[[2]])],
-            lty = 1, lwd = 2, box.col = "white", bg = "white")
-    }
-    if (!is.null(BED)) {
-        graphics::plot.new()
-        graphics::legend("left", legend = rev(object_holder$BED$software), col = rev(colorsPalette[[3]][seq_len(length(object_holder$BED$software))]),
-            lty = 1, lwd = 2, box.col = "white", bg = "white")
-    }
-
+    plotLegends(object_holder = object_holder, colorsPalette = colorsPalette, avgTrack = avgTrack, BED = BED)
     graphics::par(mfrow = c(1, 1))
 }
 
+plotLegends <- function(object_holder, colorsPalette, avgTrack, BED) {
+    legend("left", legend = seq_len(replicatesNumber(object_holder)),
+        col = colorsPalette[[1]], lty = 1, lwd = 2, box.col = "white", bg = "white")
 
+    if (avgTrack) {
+        graphics::plot.new()
+        graphics::legend("left", legend = unique(object_holder$BAM$group),
+                        col = colorsPalette[[2]][2:length(colorsPalette[[2]])],
+                        lty = 1, lwd = 2, box.col = "white", bg = "white")
+    }
+
+    if (!is.null(BED)) {
+        graphics::plot.new()
+        graphics::legend("left", legend = rev(object_holder$BED$software),
+                        col = rev(colorsPalette[[3]][seq_len(length(object_holder$BED$software))]),
+                        lty = 1, lwd = 2, box.col = "white", bg = "white")
+    }
+
+}
 # load the informations from the files
 # @param BAM a path to the BAM files input file
 # @param BED a Path to the BED files input file

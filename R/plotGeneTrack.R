@@ -165,8 +165,8 @@ findUTR5 <- function(region,m){
   map[which(map$strand == 1),"strand"] <- "+"
 
   UTR5 <- map[!is.na(map$`5_utr_start`),]
-  UTR5$chromosome_name <- as.character(GenomicRanges::seqnames(region))
   if(dim(UTR5)[1] > 0){
+    UTR5$chromosome_name <- as.character(GenomicRanges::seqnames(region))
     UTR5 <- f(UTR5)
 
   }else{
@@ -203,8 +203,8 @@ findUTR3 <- function(region,m){
   map[which(map$strand == 1),"strand"] <- "+"
 
   UTR3 <- map[!is.na(map$`3_utr_start`),]
-  UTR3$chromosome_name <- as.character(GenomicRanges::seqnames(region))
   if(dim(UTR3)[1] > 0){
+    UTR3$chromosome_name <- as.character(GenomicRanges::seqnames(region))
     UTR3 <- f(UTR3)
   }else{
     UTR3 <- GenomicRanges::GRanges()

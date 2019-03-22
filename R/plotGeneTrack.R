@@ -1,10 +1,10 @@
-############################################################################################################################################
+###############################################################################
 ##
 ## plotRegiont.R -- plot a snapshot of a genomic region
 ## 30 november 2018
 ## Thomas Faux
 ## Medical Bioinformatics Centre
-############################################################################################################################################
+###############################################################################
 
 ## geneRanges -- get the genes as GRanges
 
@@ -21,7 +21,7 @@
 # @param db object of the type BSgenome.Hsapiens.UCSC.hg19
 # @param column character, name of the column you wish to retrive (default ENTREZ_ID)
 # @return returns a GRanges of genes
-############################################################################################################################################
+###############################################################################
 ##
 ## geneRanges -- get the genes as GRanges
 ##
@@ -30,7 +30,7 @@
 ## column -- character : name of the column you wish to retrive (default ENTREZ_ID)
 ##
 ## returns a GRanges of genes
-############################################################################################################################################
+###############################################################################
 geneRanges <- function(db, column="ENTREZID")
   {
     g <- genes(db, columns=column)
@@ -47,7 +47,7 @@ geneRanges <- function(db, column="ENTREZID")
 # @param subject GRanges subject
 # @param column character for the name of columns you whish to retrive(default ENTREZ_ID)
 # @return returns a GRangesList object
-############################################################################################################################################
+###############################################################################
 ##
 ## splitColumnByOverlap -- helper function to split the genes found
 ##
@@ -58,7 +58,7 @@ geneRanges <- function(db, column="ENTREZID")
 ## column -- character : name of the column you wish to retrive (default ENTREZ_ID)
 ##
 ## returns a GRangesList object
-############################################################################################################################################
+###############################################################################
 splitColumnByOverlap <- function(query, subject, column="ENTREZID")
   {
     olaps <- GenomicRanges::findOverlaps(query, subject)
@@ -72,14 +72,14 @@ splitColumnByOverlap <- function(query, subject, column="ENTREZID")
 #
 # @param df list of dataframes containing the peaks
 # @return returns a GRangesList
-############################################################################################################################################
+###############################################################################
 ## not used ?
 ## toGRList -- transform the dataframe in GRangesList
 ##
 ## df    -- dataframe    : list of dataframes containing the peaks
 ##
 ## returns a GRangesList
-############################################################################################################################################
+###############################################################################
 toGRList <- function(df){
   grlist <- GenomicRanges::GRangesList()
   for(i in unique(df$external_gene_name)){
@@ -96,7 +96,7 @@ toGRList <- function(df){
 # @param genome Genome used by the db object "hg19","GRCh38" or "mm10"
 # @param m biomaRt object
 # @return returns GRanges with the Genes hits found in the region
-############################################################################################################################################
+###############################################################################
 ##
 ## findGenes -- find genes overlaping with the region for the given database
 ##
@@ -105,7 +105,7 @@ toGRList <- function(df){
 ## m -- biomaRt object
 ##
 ## returns genomic range of the genes present in the genomic region
-############################################################################################################################################
+###############################################################################
 findGenes <- function(region,m){
   filters <-c("chromosome_name","start","end")
   chr <- substr(as.character(seqnames(region)),4,nchar(as.character(seqnames(region))))
@@ -128,7 +128,7 @@ findGenes <- function(region,m){
 # @param region GRanges object containing the region to plot
 # @param m biomaRt object
 # @return returns GRanges with the UTR hits found in the region
-############################################################################################################################################
+###############################################################################
 ##
 ## findUTR -- find genes overlaping with the region for the given database
 ##
@@ -137,7 +137,7 @@ findGenes <- function(region,m){
 ## genome -- character : Genome used by the db object "hg19","GRCh38" or "mm10"
 ##
 ## returns genomic rangelist of the UTR regions present in the genomic region per gene
-############################################################################################################################################
+###############################################################################
 findUTR5 <- function(region,m){
   f <- function(UTR){
     return_object <- GenomicRanges::GRanges()
@@ -217,7 +217,7 @@ findUTR3 <- function(region,m){
 # @param region GRanges object containing the region to plot
 # @param genome Genome used by the db object "hg19","GRCh38" or "mm10"
 # @return returns GRanges with the Genes hits found in the region
-############################################################################################################################################
+###############################################################################
 ##
 ## getBiomaRt -- find genes overlaping with the region for the given database
 ##
@@ -226,7 +226,7 @@ findUTR3 <- function(region,m){
 ## genome -- character : Genome used by the db object "hg19","GRCh38" or "mm10"
 ##
 ## returns a biomaRt object
-############################################################################################################################################
+###############################################################################
 getBiomaRt <- function(region,genome=c("hg19","GRCh38","mm10")){
 
   if(genome == "hg19"){
@@ -249,7 +249,7 @@ getBiomaRt <- function(region,genome=c("hg19","GRCh38","mm10")){
 # @param gr GRanges object containing the region to plot
 # @param y numeric index for color purpose
 # @param size value to substract and add around the y value to create a rectangle
-############################################################################################################################################
+###############################################################################
 ##
 ## plotRectangles -- plot the rectangles of the genomic track
 ##
@@ -260,7 +260,7 @@ getBiomaRt <- function(region,genome=c("hg19","GRCh38","mm10")){
 ## y  -- numeric : index for color purpose
 ##
 ## size  -- value to substract and add around the y value to create a rectangle
-############################################################################################################################################
+###############################################################################
 plotRectangles <- function(rg,gr,y,size){
   graphics::rect(GenomicRanges::end(gr),rep(y,length(gr))-size,GenomicRanges::start(gr),rep(y,length(gr))+size,border=NA, col = "grey")#y+5)
 
@@ -274,7 +274,7 @@ plotRectangles <- function(rg,gr,y,size){
 # @param y1 list of y end points
 # @param n_arr number of arrows needed
 # @param ... graphics::arrows basic parameters
-############################################################################################################################################
+###############################################################################
 ##
 ## arrowLines -- plot the arrows between the rectangles in the genomic track
 ##
@@ -284,7 +284,7 @@ plotRectangles <- function(rg,gr,y,size){
 ##
 ## N  -- vector : number of break points needed
 ##
-############################################################################################################################################
+###############################################################################
 arrowLine <- function(x0,y0, x1,y1,n_arr,...) {
   x<- seq(x0,x1, length=n_arr+1)
   y<-seq(y0,y1, length=n_arr+1)
@@ -295,20 +295,20 @@ arrowLine <- function(x0,y0, x1,y1,n_arr,...) {
 #
 # @param gr GRanges object
 # @return GRange object
-############################################################################################################################################
+###############################################################################
 ##
 ## inverseGRanges -- return the regions contained between the ranges of a GRanges
 ##
 ## gr    -- GRanges    : list of exons in the gene
 ##
 ## returns GRange
-############################################################################################################################################
+###############################################################################
 inverseGRanges <- function(gr){
   temp <- as.data.frame(gr)
-  temp <- cbind(as.character(temp[1:dim(temp)[1]-1,1]),
-                temp[1:(dim(temp)[1]-1),3],
+  temp <- cbind(as.character(temp[seq_len(dim(temp)[1]-1),1]),
+                temp[seq_len(dim(temp)[1]-1),3],
                 temp[2:dim(temp)[1],2],
-                as.character(temp[1:dim(temp)[1]-1,5]))
+                as.character(temp[seq_len(dim(temp)[1]-1),5]))
   temp <- as.data.frame(temp)
   colnames(temp) <- c("seqnames","start","end","strand")
   temp <- GRanges(temp)
@@ -320,7 +320,7 @@ inverseGRanges <- function(gr){
 # @param gr GRanges object containing the region to plot
 # @param region GRanges object containing the region to plot
 # @param y Numeric value used for the y position of the boxes
-############################################################################################################################################
+###############################################################################
 ##
 ## plotGRanges-- wrapper function to plot the rectangles and arrows of the genomic track
 ##
@@ -329,42 +329,23 @@ inverseGRanges <- function(gr){
 ## region -- GRanges : GRanges object containing the region to plot
 ##
 ## returns a plot
-############################################################################################################################################
+###############################################################################
 plotGRanges <- function(gr,region,y,UTR3,UTR5){
   gr <- GenomicRanges::reduce(gr)
 
   if(length(gr) > 1){
     gr_inv <- inverseGRanges(gr)
-    for(j in 1:length(gr_inv)){
-      N <- 0
+    for(j in seq_len(length(gr_inv))){
       value <- (GenomicRanges::end(gr_inv[j])-GenomicRanges::start(gr_inv[j]))/(GenomicRanges::end(region)-GenomicRanges::start(region))
-
-
-      if(value < 0.25){
-        N=1
-      }
-      if(value > 0.25){
-        N=2
-      }
-      if(value > 0.75){
-        N=3
-      }
-      if(value > 1){
-        N=6
-      }
-      if(value > 2){
-        N=12
-      }
+      N <- arrowNumbers(value)
       if(as.character(strand(gr_inv[j])) == "-"){
         arrowLine(GenomicRanges::end(gr_inv[j]),y,GenomicRanges::start(gr_inv[j]),y,n_arr=N,length=0.1)
       }
       if(as.character(strand(gr_inv[j])) == "+"){
         arrowLine(GenomicRanges::start(gr_inv[j]),y,GenomicRanges::end(gr_inv[j]),y,n_arr=N,length=0.1)
       }
-
     }
   }
-
   if(length(UTR5) > 0){
     plotRectangles(region,UTR5,y,size=0.25)
     if(as.character(unique(strand(gr))) == "-"){
@@ -387,11 +368,31 @@ plotGRanges <- function(gr,region,y,UTR3,UTR5){
 
 }
 
+arrowNumbers <- function(value){
+  N<-0
+  if(value < 0.25){
+    N=1
+  }
+  if(value > 0.25){
+    N=2
+  }
+  if(value > 0.75){
+    N=3
+  }
+  if(value > 1){
+    N=6
+  }
+  if(value > 2){
+    N=12
+  }
+  return(N)
+}
+
 # plot the genomic track
 #
 # @param gr GRanges object containing the region to plot
 # @param region GRanges object containing the region to plot
-############################################################################################################################################
+###############################################################################
 ##
 ## plotGenomicTrack -- plot the genomic track
 ##
@@ -400,7 +401,7 @@ plotGRanges <- function(gr,region,y,UTR3,UTR5){
 ## region -- GRanges : GRanges object containing the region to plot
 ##
 ## returns a plot
-############################################################################################################################################
+###############################################################################
 plotGenomicTrack <- function(gr,UTR3,UTR5,region){
 
   if(dim(as.data.frame(gr))[1]>0){

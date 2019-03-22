@@ -26,9 +26,9 @@ list.files(system.file("extdata", package = "RepViz"),pattern = ".bam")
 #                 genome = "hg19",
 #                 BAM = "BAM_input.csv",
 #                 BED = "BED_input.csv",
-#                 avgTrack = T,
-#                 geneTrack = T,
-#                 verbose = F)
+#                 avgTrack = TRUE,
+#                 geneTrack = TRUE,
+#                 verbose = FALSE)
 #  
 #  
 #  
@@ -39,9 +39,9 @@ RepViz::RepViz(region = region,
                genome = "hg19",
                BAM = "BAM_input.csv",
                BED = "BED_input.csv",
-               avgTrack = T,
-               geneTrack = T,
-               verbose = F)
+               avgTrack = TRUE,
+               geneTrack = TRUE,
+               verbose = FALSE)
 
 
 

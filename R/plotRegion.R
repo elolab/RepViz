@@ -1,10 +1,10 @@
-############################################################################################################################################
+###############################################################################
 ##
 ## plotRegiont.R -- plot a snapshot of a genomic region
 ## 30 november 2018
 ## Thomas Faux
 ## Medical Bioinformatics Centre
-############################################################################################################################################
+###############################################################################
 
 ## createDataObject -- load the data from the files
 ## unitTest -- check if the files are present, if not returns an error message
@@ -33,6 +33,7 @@ NULL
 #' @param geneTrack a logical indicating if the gene track should be included or not
 #' @param max a numerical vector containing the yaxis maximum value of each BAM track
 #' @param verbose a logical indicating whether the progress of the plotting is shown
+#'
 #'
 #' @examples
 #' region <- GRanges("chr12:110938000-110940000")
@@ -70,7 +71,7 @@ RepViz <- function(region,genome,BAM=NULL,BED=NULL,avgTrack=TRUE,geneTrack=TRUE,
       max <- rep(max(as.numeric(names(table(unlist(coverages))))),length(unique(object_holder$BAM$group)))
     }
 
-    for(group in 1:length(unique(object_holder$BAM$group))){
+    for(group in seq_len(length(unique(object_holder$BAM$group)))){
       plotBAM(region,
               coverages[[group]],
               max[group],
@@ -111,14 +112,14 @@ RepViz <- function(region,genome,BAM=NULL,BED=NULL,avgTrack=TRUE,geneTrack=TRUE,
   }
   graphics::par(mar=c(1, 1, 1, 1))
   graphics::plot.new()
-  legend("left",legend = 1:replicatesNumber(object_holder), col = colorsPalette[[1]],lty=1,lwd = 2,box.col = "white",bg = "white")
+  legend("left",legend = seq_len(replicatesNumber(object_holder)), col = colorsPalette[[1]],lty=1,lwd = 2,box.col = "white",bg = "white")
   if(avgTrack){
     graphics::plot.new()
     graphics::legend("left",legend = unique(object_holder$BAM$group), col = colorsPalette[[2]][2:length(colorsPalette[[2]])] ,lty=1,lwd = 2,box.col = "white",bg = "white")
   }
   if(!is.null(BED)){
     graphics::plot.new()
-    graphics::legend("left",legend = rev(object_holder$BED$software), col = rev(colorsPalette[[3]][1:length(object_holder$BED$software)]),lty=1,lwd = 2,box.col = "white",bg = "white")
+    graphics::legend("left",legend = rev(object_holder$BED$software), col = rev(colorsPalette[[3]][seq_len(length(object_holder$BED$software))]),lty=1,lwd = 2,box.col = "white",bg = "white")
   }
 
   graphics::par(mfrow=c(1,1))
@@ -130,7 +131,7 @@ RepViz <- function(region,genome,BAM=NULL,BED=NULL,avgTrack=TRUE,geneTrack=TRUE,
 # @param BAM a path to the BAM files input file
 # @param BED a Path to the BED files input file
 # @return returns an object containing the info in the csv files
-############################################################################################################################################
+###############################################################################
 ##
 ## createDataObject -- load the informations from the files
 ##
@@ -139,7 +140,7 @@ RepViz <- function(region,genome,BAM=NULL,BED=NULL,avgTrack=TRUE,geneTrack=TRUE,
 ##
 ##
 ## returns an object containing the info in the csv files
-############################################################################################################################################
+###############################################################################
 createDataObject <- function(BAM=NULL, BED=NULL, verbose=TRUE){
   #takes into input the pah of the file with the bam and bed
   return_object <- list()
@@ -169,7 +170,7 @@ createDataObject <- function(BAM=NULL, BED=NULL, verbose=TRUE){
 # @param n integer representing number of hues
 # @param alpha double for transparancy, ranges from 0.0 to 1.0
 # @return returns a list of hues
-############################################################################################################################################
+###############################################################################
 ##
 ## gg_color_hue -- create a color palette similar to ggplot2
 ##
@@ -178,25 +179,25 @@ createDataObject <- function(BAM=NULL, BED=NULL, verbose=TRUE){
 ##
 ##
 ## returns a list of hues
-############################################################################################################################################
+###############################################################################
 
 gg_color_hue <- function(n,alpha) {
   hues = seq(15, 375, length = n + 1)
-  grDevices::hcl(h = hues, l = 65, c = 100, alpha = alpha)[1:n]
+  grDevices::hcl(h = hues, l = 65, c = 100, alpha = alpha)[seq_len(n)]
 }
 
 # create a palette for each plot
 #
 # @param object info contained in the csv input files
 # @return returns a colorPalette for each plot
-############################################################################################################################################
+###############################################################################
 ##
 ## defineColorPalettes -- create a palette for each plot
 ##
 ## object -- object  : info contained in the csv input files
 ##
 ## returns a colorPalette for each plot
-############################################################################################################################################
+###############################################################################
 defineColorPalettes <- function(object){
   if("BAM" %in% names(object)){
     nbrep <- replicatesNumber(object)
@@ -224,7 +225,7 @@ defineColorPalettes <- function(object){
 # @param geneTrack logical if the gene track present or not
 # @param avgTrack logical if the average track present or not
 # @return returns a matrix to input in the layout function
-############################################################################################################################################
+###############################################################################
 ##
 ## defineLayout -- create a matrix for the layout function
 ##
@@ -233,20 +234,20 @@ defineColorPalettes <- function(object){
 ## geneTrack -- boolean : is the gene track present or not
 ##
 ## returns a matrix to input in the layout function
-############################################################################################################################################
+###############################################################################
 defineLayout <- function(object_holder,geneTrack,avgTrack){
   groups <- length(unique(object_holder$BAM$group))
   if(geneTrack){
-    mat <- matrix(c(1:(groups+1),groups+2,groups+3,rep(x=groups+4,groups),groups+5,groups+6,groups+7), groups+3, 2, byrow = FALSE)
+    mat <- matrix(c(seq_len((groups+1)),groups+2,groups+3,rep(x=groups+4,groups),groups+5,groups+6,groups+7), groups+3, 2, byrow = FALSE)
   }
   if(!avgTrack){
-    mat <- matrix(c(1:(groups+1),groups+2,rep(x=groups+3,groups),groups+4,groups+5), groups+2, 2, byrow = FALSE)
+    mat <- matrix(c(seq_len((groups+1)),groups+2,rep(x=groups+3,groups),groups+4,groups+5), groups+2, 2, byrow = FALSE)
   }
   if(!geneTrack){
-    mat <- matrix(c(1:(groups+1),groups+2,rep(x=groups+3,groups),groups+4,groups+5), groups+2, 2, byrow = FALSE)
+    mat <- matrix(c(seq_len((groups+1)),groups+2,rep(x=groups+3,groups),groups+4,groups+5), groups+2, 2, byrow = FALSE)
   }
   if(!"BED" %in% names(object_holder)){
-    mat <- matrix(c(1:(groups+1),groups+2,rep(x=groups+3,groups),groups+4,groups+5), groups+2, 2, byrow = FALSE)
+    mat <- matrix(c(seq_len((groups+1)),groups+2,rep(x=groups+3,groups),groups+4,groups+5), groups+2, 2, byrow = FALSE)
   }
   return(mat)
 }
@@ -255,13 +256,13 @@ defineLayout <- function(object_holder,geneTrack,avgTrack){
 #
 # @param object_holder info contained in the csv input files
 
-############################################################################################################################################
+###############################################################################
 ##
 ## unitTest -- check if the files are present, if not returns an error message
 ##
 ## object -- object  : info contained in the csv input files
 ##
-############################################################################################################################################
+###############################################################################
 unitTest <- function(object_holder){
   for(file in object_holder$BAM$files){
     if(!file.exists(file)){
@@ -283,13 +284,13 @@ unitTest <- function(object_holder){
 # @param object_holder info contained in the csv input files
 # @return The maximum number of replicates in the groups
 
-############################################################################################################################################
+###############################################################################
 ##
 ## replicatesNumber -- calculate the maximum number of replicates
 ##
 ## object_holder -- object  : info contained in the csv input files
 ##
-############################################################################################################################################
+###############################################################################
 replicatesNumber <- function(object_holder){
   groupnb <- unique(object_holder$BAM$group)
 

@@ -1,10 +1,10 @@
-############################################################################################################################################
+###############################################################################
 ##
 ## plotRegiont.R -- plot a snapshot of a genomic region
 ## 30 november 2018
 ## Thomas Faux
 ## Medical Bioinformatics Centre
-############################################################################################################################################
+###############################################################################
 
 ## loadPeaks -- load the peaks from the bed files listed in the info
 
@@ -19,7 +19,7 @@
 # @param region GRanges object containing the region to plot
 # @param colorPalette Contain vector of colors to be used for each line
 # @param verbose Prompt the progress
-############################################################################################################################################
+###############################################################################
 ##
 ## plotBED -- plot the regions that are contained in BED
 ##
@@ -30,7 +30,7 @@
 ## colorPalette -- vector : Contain the colors to be used for each line
 ##
 ## returns a plot
-############################################################################################################################################
+###############################################################################
 
 plotBED <- function(BED,region,colorPalette,verbose){
 
@@ -66,7 +66,7 @@ plotBED <- function(BED,region,colorPalette,verbose){
 # @param region GRanges object containing the region to plot
 # @param verbose Prompt the progress
 # @return returns a list of dataframes containing the peaks
-############################################################################################################################################
+###############################################################################
 ##
 ## takePeaksOverlap -- take the peaks that are overlaping with the region to plot
 ##
@@ -75,7 +75,7 @@ plotBED <- function(BED,region,colorPalette,verbose){
 ## region -- GRanges : GRanges object containing the region to plot
 ##
 ## returns a list of dataframes containing the peaks
-############################################################################################################################################
+###############################################################################
 takePeaksOverlap <-function(BED,region,verbose){
   if(verbose == TRUE){
     cat("overlapping peaks with region \n")
@@ -84,7 +84,7 @@ takePeaksOverlap <-function(BED,region,verbose){
 
   return_object <- GenomicRanges::GRangesList()
   for(software in names(peaks)){
-    temp <- peaks[[software]][1:3]
+    temp <- peaks[[software]][c(1,2,3)]
     colnames(temp) <- c("seqname","start","end")
     temp <- GenomicRanges::GRanges(temp)
     return_object[[software]] <-temp[S4Vectors::queryHits(GenomicRanges::findOverlaps(temp,region))]
@@ -98,14 +98,14 @@ takePeaksOverlap <-function(BED,region,verbose){
 # @param BED  list of dataframes containing the peaks
 # @param verbose Prompt the progress
 # @return returns a list of dataframes containing the peaks
-############################################################################################################################################
+###############################################################################
 ##
 ## loadPeaks -- load the peaks from the bed files listed in the info
 ##
 ## BED   -- list   : list of path to bed files
 ##
 ## returns a list of dataframes containing the peaks
-############################################################################################################################################
+###############################################################################
 loadPeaks <- function(BED,verbose){
   if(verbose == TRUE){
     cat("load the peak files \n")

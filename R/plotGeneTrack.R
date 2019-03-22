@@ -108,7 +108,7 @@ toGRList <- function(df){
 ############################################################################################################################################
 findGenes <- function(region,m){
   filters <-c("chromosome_name","start","end")
-  chr <- as.integer(substr(as.character(seqnames(region)),4,nchar(as.character(seqnames(region)))))
+  chr <- substr(as.character(seqnames(region)),4,nchar(as.character(seqnames(region))))
   values <-  list(chr,GenomicRanges::start(region),GenomicRanges::end(region))
   map <- biomaRt::getBM(mart = m,
         attributes = c("ensembl_gene_id", "external_gene_name","ensembl_exon_id","chromosome_name","exon_chrom_start","exon_chrom_end","strand"),
@@ -153,7 +153,7 @@ findUTR5 <- function(region,m){
     return(return_object)
   }
   filters <-c("chromosome_name","start","end")
-  chr <- as.integer(substr(as.character(seqnames(region)),4,nchar(as.character(seqnames(region)))))
+  chr <- substr(as.character(seqnames(region)),4,nchar(as.character(seqnames(region))))
   values <-  list(chr,GenomicRanges::start(region),GenomicRanges::end(region))
   map <- biomaRt::getBM(mart = m,
                         attributes = c("external_gene_name","chromosome_name","strand","5_utr_start","5_utr_end","transcript_length"),
@@ -191,7 +191,7 @@ findUTR3 <- function(region,m){
     return(return_object)
   }
   filters <-c("chromosome_name","start","end")
-  chr <- as.integer(substr(as.character(seqnames(region)),4,nchar(as.character(seqnames(region)))))
+  chr <- substr(as.character(seqnames(region)),4,nchar(as.character(seqnames(region))))
   values <-  list(chr,GenomicRanges::start(region),GenomicRanges::end(region))
   map <- biomaRt::getBM(mart = m,
                         attributes = c("external_gene_name","chromosome_name","strand","3_utr_start","3_utr_end","transcript_length"),

@@ -60,8 +60,13 @@ makeCoverages <- function(region,BAMlayout){
 ## returns the coverage of one file
 ############################################################################################################################################
 getCoverage <- function(region, bamfile){
-  x <- GenomicAlignments::coverage(Rsamtools::BamFile(bamfile))
-  coverage <- as.numeric(x[[GenomicRanges::seqnames(region)]][GenomicRanges::ranges(region)])
+
+  params <- ScanBamParam(which = region, what = scanBamWhat())
+  aln <- scanBam(Rsamtools::BamFile(bamfile), param = params)[[1]]
+  coverage <- coverage(IRanges(aln[["pos"]], width=aln[["qwidth"]]))
+  coverage <- as.numeric(coverage)[GenomicRanges::start(region):GenomicRanges::end(region)]
+  #x <- GenomicAlignments::coverage(Rsamtools::BamFile(bamfile))
+  #coverage <- as.numeric(x[[GenomicRanges::seqnames(region)]][GenomicRanges::ranges(region)])
   return(coverage)
 }
 
@@ -143,7 +148,7 @@ plotAverageBAM <- function(region,coverages,conditions,colorPalette){
     coverage <- cbind(as.data.frame(coverages[[i]]))
     average_cov <- cbind(average_cov,rowMeans(coverage))
   }
-  max <- max(unlist(average_cov[,-1]))
+  max <- max(as.numeric(names(table(unlist(average_cov[,-1])))))
   colnames(average_cov) <- c("position",sprintf("condition%02d", seq(1,length(coverages))))
   graphics::plot(1,xlim=c(GenomicRanges::start(region),GenomicRanges::end(region)),ylim=c(0,max), main="",ylab="Average coverage",xlab="",xaxt="n")
   for(i in 2:length(average_cov)){

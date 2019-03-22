@@ -65,19 +65,25 @@ RepViz <- function(region,genome,BAM=NULL,BED=NULL,avgTrack=TRUE,geneTrack=TRUE,
       cat("plotting the coverages \n")
     }
     layout <- makeBAMLayout(object_holder$BAM,region)
-    #coord <- c(as.character(GenomicRanges::seqnames(region)),GenomicRanges::start(region),GenomicRanges::end(region))
     coverages <- makeCoverages(region,layout)
     print(coverages)
     if(is.null(max)){
-      max <- rep(max(unlist(coverages)),length(unique(object_holder$BAM$group)))
+      max <- rep(max(as.numeric(names(table(unlist(coverages))))),length(unique(object_holder$BAM$group)))
     }
 
     for(group in 1:length(unique(object_holder$BAM$group))){
-
-      plotBAM(region,coverages[[group]],max[group],unique(object_holder$BAM$group)[group],colorsPalette[[1]])
+      plotBAM(region,
+              coverages[[group]],
+              max[group],
+              unique(object_holder$BAM$group)[group],
+              colorsPalette[[1]])
     }
+
     if(avgTrack == TRUE){
-      plotAverageBAM(region,coverages,unique(object_holder$BAM$group),colorsPalette[[2]])
+      plotAverageBAM(region,
+                     coverages,
+                     unique(object_holder$BAM$group),
+                     colorsPalette[[2]])
     }
 
   }
@@ -85,7 +91,10 @@ RepViz <- function(region,genome,BAM=NULL,BED=NULL,avgTrack=TRUE,geneTrack=TRUE,
     if(verbose == TRUE){
       cat("plotting the BED files \n")
     }
-    plotBED(BED = object_holder$BED,region = region,colorsPalette[[3]],verbose)
+    plotBED(BED = object_holder$BED,
+            region = region,
+            colorsPalette[[3]],
+            verbose)
   }
 
   if(geneTrack == TRUE){
@@ -96,7 +105,10 @@ RepViz <- function(region,genome,BAM=NULL,BED=NULL,avgTrack=TRUE,geneTrack=TRUE,
     UTR5 <- findUTR5(region,bm)
     UTR3 <- findUTR3(region,bm)
     gr <- findGenes(region,bm)
-    plotGenomicTrack(gr = gr,UTR3 = UTR3, UTR5 = UTR5,region)
+    plotGenomicTrack(gr = gr,
+                     UTR3 = UTR3,
+                     UTR5 = UTR5,
+                     region)
   }
   graphics::par(mar=c(1, 1, 1, 1))
   graphics::plot.new()

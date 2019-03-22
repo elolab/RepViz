@@ -13,7 +13,7 @@
 ## defineColorPalettes -- create a palette for each plot
 ## defineLayout -- create a matrix for the layout function
 
-#' @importFrom rbamtools getRefCoords bamReader bamCount
+#' @import Rsamtools
 #' @import GenomicRanges
 #' @importFrom biomaRt getBM useMart
 #' @importFrom IRanges elementNROWS splitAsList

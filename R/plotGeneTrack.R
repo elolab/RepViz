@@ -331,6 +331,8 @@ inverseGRanges <- function(gr){
 ## returns a plot
 ############################################################################################################################################
 plotGRanges <- function(gr,region,y,UTR3,UTR5){
+  gr2 <- gr
+  gr <- GenomicRanges::reduce(gr)
   if(length(UTR5) > 0){
     plotRectangles(region,UTR5,y,size=0.25)
     if(as.character(unique(strand(gr))) == "-"){
@@ -352,7 +354,7 @@ plotGRanges <- function(gr,region,y,UTR3,UTR5){
   plotRectangles(region,gr,y,size=0.5)
 
   if(length(gr) > 1){
-    gr <- inverseGRanges(gr)
+    gr <- inverseGRanges(gr2)
     for(j in 1:length(gr)){
       N <- 0
       value <- (GenomicRanges::end(gr[j])-GenomicRanges::start(gr[j]))/(GenomicRanges::end(region)-GenomicRanges::start(region))
@@ -426,7 +428,7 @@ plotGenomicTrack <- function(gr,UTR3,UTR5,region){
         gr2 <- gr[(GenomicRanges::elementMetadata(gr)[,"external_gene_name"] %in% i)]
         UTR3_ind <- UTR3[(GenomicRanges::elementMetadata(UTR3)[,"external_gene_name"] %in% i)]
         UTR5_ind <- UTR5[(GenomicRanges::elementMetadata(UTR5)[,"external_gene_name"] %in% i)]
-        plotGRanges(GenomicRanges::reduce(gr2),region,index-0.5,UTR3=UTR3_ind,UTR5=UTR5_ind)
+        plotGRanges(gr2,region,index-0.5,UTR3=UTR3_ind,UTR5=UTR5_ind)
       }
 
     }

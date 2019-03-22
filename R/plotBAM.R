@@ -61,7 +61,7 @@ getCoverage <- function(region, bamfile){
 
   params <- ScanBamParam(which = region, what = scanBamWhat())
   aln <- scanBam(Rsamtools::BamFile(bamfile), param = params)[[1]]
-  coverage <- coverage(IRanges(aln[["pos"]], width=aln[["qwidth"]]))
+  coverage <- coverage(IRanges::IRanges(aln[["pos"]], width=aln[["qwidth"]]))
   coverage <- as.numeric(coverage)[GenomicRanges::start(region):GenomicRanges::end(region)]
   return(coverage)
 }

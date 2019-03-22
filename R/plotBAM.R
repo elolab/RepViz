@@ -10,9 +10,7 @@
 
 ## makeBAMLayout -- create the layout from the BAM info
 
-## getCoverage -- create the readerfor rbamtools
-
-## coverageGenomicRegion -- call the rbamtools coverage calculation
+## getCoverage -- compute the coverage with Rsamtools
 
 ## plotAverageBAM -- plot the average of each group
 
@@ -44,14 +42,14 @@ makeCoverages <- function(region,BAMlayout){
   return(coverages)
 }
 
-# create the reader for rbamtools
+# compute the coverage with Rsamtools
 #
 # @param bamfile character path to the BAM file
 # @param region GRanges object containing the region to plot
 # @return returns the coverage of one file
 ############################################################################################################################################
 ##
-## getCoverage -- create the readerfor rbamtools
+## getCoverage -- compute the coverage with Rsamtools
 ##
 ## bamfile  -- character : path to the BAM file
 ##
@@ -65,37 +63,8 @@ getCoverage <- function(region, bamfile){
   aln <- scanBam(Rsamtools::BamFile(bamfile), param = params)[[1]]
   coverage <- coverage(IRanges(aln[["pos"]], width=aln[["qwidth"]]))
   coverage <- as.numeric(coverage)[GenomicRanges::start(region):GenomicRanges::end(region)]
-  #x <- GenomicAlignments::coverage(Rsamtools::BamFile(bamfile))
-  #coverage <- as.numeric(x[[GenomicRanges::seqnames(region)]][GenomicRanges::ranges(region)])
   return(coverage)
 }
-
-# # call the rbamtools coverage calculation
-# #
-# # @param coord vector of coordiantes of the region, chromosom, start and end
-# # @param reader  rbamtools reader
-# # @return returns a vector with the coverage of one file
-# ############################################################################################################################################
-# ##
-# ## coverageGenomicRegion -- call the rbamtools coverage calculation
-# ##
-# ## coord    -- vector : coordiantes of the region, chromosom, start and end
-# ##
-# ## reader   -- reader : rbamtools reader
-# ##
-# ## returns a vector with the coverage of one file
-# ############################################################################################################################################
-# coverageGenomicRegion <- function(coord,reader){
-#   vec <- vector()
-#   for(i in coord[2]:coord[3]){
-#     coords<-rbamtools::getRefCoords(reader,coord[[1]])
-#     coords[2]<-i-1
-#     coords[3]<-i
-#     count<-rbamtools::bamCount(reader,coords)
-#     vec <- c(vec,count[10])
-#   }
-#   return(vec)
-# }
 
 # create the layout from the BAM info
 #

@@ -66,7 +66,6 @@ RepViz <- function(region,genome,BAM=NULL,BED=NULL,avgTrack=TRUE,geneTrack=TRUE,
     }
     layout <- makeBAMLayout(object_holder$BAM,region)
     coverages <- makeCoverages(region,layout)
-    print(coverages)
     if(is.null(max)){
       max <- rep(max(as.numeric(names(table(unlist(coverages))))),length(unique(object_holder$BAM$group)))
     }
@@ -210,7 +209,6 @@ defineColorPalettes <- function(object){
   }
   if("BED" %in% names(object)){
     BED <- gg_color_hue(length(object$BED$software)+ceiling(length(object$BAM$condition))/2)
-    #BED <- BED[-c(1:ceiling(length(object$BAM$condition))/2)]
   }
   else{
     BED<-NULL

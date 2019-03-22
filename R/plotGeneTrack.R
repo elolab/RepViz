@@ -53,23 +53,27 @@ toGRList <- function(df) {
 # @param m biomaRt object @return returns GRanges with the Genes hits found in the region
 
 findGenes <- function(region, m) {
-      filters <- c("chromosome_name", "start", "end")
-      chr <- substr(as.character(seqnames(region)), 4, nchar(as.character(seqnames(region))))
-      values <- list(chr, GenomicRanges::start(region), GenomicRanges::end(region))
-      map <- biomaRt::getBM(mart = m, attributes = c("ensembl_gene_id",
+       filters <- c("chromosome_name", "start", "end")
+       chr <- substr(as.character(seqnames(region)), 4,
+                   nchar(as.character(seqnames(region))))
+       values <- list(chr, GenomicRanges::start(region),
+                   GenomicRanges::end(region))
+       map <- biomaRt::getBM(mart = m, attributes = c("ensembl_gene_id",
                                                       "external_gene_name",
                                                       "ensembl_exon_id",
                                                       "chromosome_name",
                                                       "exon_chrom_start",
                                                       "exon_chrom_end",
-                                                      "strand"), filters = filters,
+                                                      "strand"),
+                                                      filters = filters,
                                                       values = values)
 
-      map[which(map$strand == -1), "strand"] <- "-"
-      map[which(map$strand == 1), "strand"] <- "+"
-      map$chromosome_name <- as.character(GenomicRanges::seqnames(region))
-      gr <- GenomicRanges::makeGRangesFromDataFrame(map, keep.extra.columns = TRUE)
-      return(gr)
+       map[which(map$strand == -1), "strand"] <- "-"
+       map[which(map$strand == 1), "strand"] <- "+"
+       map$chromosome_name <- as.character(GenomicRanges::seqnames(region))
+       gr <- GenomicRanges::makeGRangesFromDataFrame(map,
+                                       keep.extra.columns = TRUE)
+       return(gr)
 }
 
 # find UTR overlaping with the region for the given database

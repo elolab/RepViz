@@ -60,37 +60,37 @@ makeCoverages <- function(region,BAMlayout){
 ## returns the coverage of one file
 ############################################################################################################################################
 getCoverage <- function(region, bamfile){
-  reader<-rbamtools::bamReader(bamfile,idx=TRUE)
-  coverage <- coverageGenomicRegion(coord = region,reader=reader)
+  x <- GenomicAlignments::coverage(Rsamtools::BamFile(bamfile))
+  coverage <- as.numeric(x[[GenomicRanges::seqnames(region)]][GenomicRanges::ranges(region)])
   return(coverage)
 }
 
-# call the rbamtools coverage calculation
-#
-# @param coord vector of coordiantes of the region, chromosom, start and end
-# @param reader  rbamtools reader
-# @return returns a vector with the coverage of one file
-############################################################################################################################################
-##
-## coverageGenomicRegion -- call the rbamtools coverage calculation
-##
-## coord    -- vector : coordiantes of the region, chromosom, start and end
-##
-## reader   -- reader : rbamtools reader
-##
-## returns a vector with the coverage of one file
-############################################################################################################################################
-coverageGenomicRegion <- function(coord,reader){
-  vec <- vector()
-  for(i in coord[2]:coord[3]){
-    coords<-rbamtools::getRefCoords(reader,coord[[1]])
-    coords[2]<-i-1
-    coords[3]<-i
-    count<-rbamtools::bamCount(reader,coords)
-    vec <- c(vec,count[10])
-  }
-  return(vec)
-}
+# # call the rbamtools coverage calculation
+# #
+# # @param coord vector of coordiantes of the region, chromosom, start and end
+# # @param reader  rbamtools reader
+# # @return returns a vector with the coverage of one file
+# ############################################################################################################################################
+# ##
+# ## coverageGenomicRegion -- call the rbamtools coverage calculation
+# ##
+# ## coord    -- vector : coordiantes of the region, chromosom, start and end
+# ##
+# ## reader   -- reader : rbamtools reader
+# ##
+# ## returns a vector with the coverage of one file
+# ############################################################################################################################################
+# coverageGenomicRegion <- function(coord,reader){
+#   vec <- vector()
+#   for(i in coord[2]:coord[3]){
+#     coords<-rbamtools::getRefCoords(reader,coord[[1]])
+#     coords[2]<-i-1
+#     coords[3]<-i
+#     count<-rbamtools::bamCount(reader,coords)
+#     vec <- c(vec,count[10])
+#   }
+#   return(vec)
+# }
 
 # create the layout from the BAM info
 #
@@ -138,14 +138,14 @@ makeBAMLayout <- function(BAM,region){
 ## returns a plot
 ############################################################################################################################################
 plotAverageBAM <- function(region,coverages,conditions,colorPalette){
-  average_cov <- data.frame(region[2]:region[3])
+  average_cov <- data.frame(GenomicRanges::start(region):GenomicRanges::end(region))
   for(i in 1:length(coverages)){
     coverage <- cbind(as.data.frame(coverages[[i]]))
     average_cov <- cbind(average_cov,rowMeans(coverage))
   }
   max <- max(unlist(average_cov[,-1]))
   colnames(average_cov) <- c("position",sprintf("condition%02d", seq(1,length(coverages))))
-  graphics::plot(1,xlim=c(as.numeric(region[2]),as.numeric(region[3])),ylim=c(0,max), main="",ylab="Average coverage",xlab="",xaxt="n")
+  graphics::plot(1,xlim=c(GenomicRanges::start(region),GenomicRanges::end(region)),ylim=c(0,max), main="",ylab="Average coverage",xlab="",xaxt="n")
   for(i in 2:length(average_cov)){
     graphics::lines(average_cov[,"position"],average_cov[,i],col=colorPalette[i],lwd = 2)
   }
@@ -174,9 +174,9 @@ plotAverageBAM <- function(region,coverages,conditions,colorPalette){
 ## returns a plot
 ############################################################################################################################################
 plotBAM <- function(region,coverages, max, condition,colorPalette){
-  coverage <- cbind(as.data.frame(coverages),region[2]:region[3])
+  coverage <- cbind(as.data.frame(coverages),GenomicRanges::start(region):GenomicRanges::end(region))
   colnames(coverage) <- c(sprintf("rep%02d", seq(1,length(coverages))),"position")
-  graphics::plot(1,xlim=c(as.numeric(region[2]),as.numeric(region[3])),ylim=c(0,max), main="",ylab=condition,xlab="",xaxt="n")
+  graphics::plot(1,xlim=c(GenomicRanges::start(region),GenomicRanges::end(region)),ylim=c(0,max), main="",ylab=condition,xlab="",xaxt="n")
   for(i in 1:(length(coverage)-1)){
     graphics::lines(coverage[,"position"],coverage[,i],col=colorPalette[i])
   }

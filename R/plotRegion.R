@@ -65,19 +65,19 @@ RepViz <- function(region,genome,BAM=NULL,BED=NULL,avgTrack=TRUE,geneTrack=TRUE,
       cat("plotting the coverages \n")
     }
     layout <- makeBAMLayout(object_holder$BAM,region)
-    coord <- c(as.character(GenomicRanges::seqnames(region)),GenomicRanges::start(region),GenomicRanges::end(region))
-    coverages <- makeCoverages(coord,layout)
-
+    #coord <- c(as.character(GenomicRanges::seqnames(region)),GenomicRanges::start(region),GenomicRanges::end(region))
+    coverages <- makeCoverages(region,layout)
+    print(coverages)
     if(is.null(max)){
       max <- rep(max(unlist(coverages)),length(unique(object_holder$BAM$group)))
     }
 
     for(group in 1:length(unique(object_holder$BAM$group))){
 
-      plotBAM(coord,coverages[[group]],max[group],unique(object_holder$BAM$group)[group],colorsPalette[[1]])
+      plotBAM(region,coverages[[group]],max[group],unique(object_holder$BAM$group)[group],colorsPalette[[1]])
     }
     if(avgTrack == TRUE){
-      plotAverageBAM(coord,coverages,unique(object_holder$BAM$group),colorsPalette[[2]])
+      plotAverageBAM(region,coverages,unique(object_holder$BAM$group),colorsPalette[[2]])
     }
 
   }

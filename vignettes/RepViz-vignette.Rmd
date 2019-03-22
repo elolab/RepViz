@@ -11,6 +11,7 @@ vignette: >
 ---
 
 ```{r setup, include=FALSE}
+suppressMessages(library(GenomicRanges))
 library(knitr)
 knitr::opts_chunk$set(echo = TRUE)
 opts_knit$set(root.dir = system.file("extdata", package = "RepViz"))
@@ -23,7 +24,7 @@ In an effort to provide a simple and efficient visualization of genomic regions 
 
 ## Before starting
 
-Before executing the commands, it will be necessary to copy the example files to your working directory with this commend:
+Before executing the commands, it will be necessary to copy the example files to your working directory with this command:
 ```{r download BAM,eval = FALSE}
 file.copy(from = list.files(system.file("extdata", package = "RepViz"), full.names = TRUE),to = getwd())
 ```
@@ -47,7 +48,7 @@ colnames(BED_table) <- c("bed file","Legend")
 knitr::kable(BED_table)
 ```
 
-A BAI file is the index file of the BAM file. It takes the same name as a BAM file with an added suffix ".bai". Note that the corresponding BAI files need to be present in the same folder with the BAM files 
+Note that the corresponding BAI files need to be present in the same folder with the BAM files. A BAI file is the index file of the BAM file. It takes the same name as the BAM file with an added suffix ".bai".
 
 ```{r bam files, echo=FALSE}
 list.files(system.file("extdata", package = "RepViz"),pattern = ".bam")
@@ -55,13 +56,10 @@ list.files(system.file("extdata", package = "RepViz"),pattern = ".bam")
 
 ## The plotting function
 
-Once the CSV input files are ready, the user needs to declare the region that will be visualized together with the genome matching the BAM and BED files. For this example we are using the region in the vicinity of the VPS29 gene. The genomes that are currently implemented are hg19, hg38 and mm10. The avgTrack and geneTrack logicals enable you to control whether the gene track and average track are plotted or not.
+Once the CSV input files are ready, the user needs to declare the region that will be visualized together with the genome matching the BAM and BED files. For this example we are using the region in the vicinity of the VPS29 gene. The genomes that are currently implemented are hg19, hg38 and mm10. The avgTrack and geneTrack logicals enable to control whether the gene track and average track are plotted or not.
 
-```{r GRanges, echo=FALSE,prompt=FALSE}
-suppressMessages(library(GenomicRanges))
-```
 
-```{r plot,fig.height=10,fig.width=7,prompt=FALSE}
+```{r plot_code,fig.height=10,fig.width=7,prompt=FALSE,eval = FALSE}
 region <- GRanges("chr12:110938000-110940000")
 RepViz::RepViz(region = region,
                genome = "hg19",
@@ -75,4 +73,18 @@ RepViz::RepViz(region = region,
 
 ```
 
-Above is the output of the visualization. The two first boxes starting from the top part are showing the different replicates separated by group name (the number of boxes depends on the number of groups). The following box shows the group averages. The second to last box visualizes the genomic regions present in the BED file. The last box is the genomic track.
+Bellow is the output of the visualization. The two upper panels show the different replicates within each group,with the number of panels depending on the number of groups. The third panel shows the group averages. The fourth panel visualizes the genomic regions specified in the BED file, whereas The lowest panel shows the genomic track.
+
+```{r plot_plot,fig.height=10,fig.width=7,prompt=FALSE, echo=FALSE}
+region <- GRanges("chr12:110938000-110940000")
+RepViz::RepViz(region = region,
+               genome = "hg19",
+               BAM = "BAM_input.csv",
+               BED = "BED_input.csv",
+               avgTrack = T,
+               geneTrack = T,
+               verbose = F)
+
+
+
+```

@@ -331,8 +331,40 @@ inverseGRanges <- function(gr){
 ## returns a plot
 ############################################################################################################################################
 plotGRanges <- function(gr,region,y,UTR3,UTR5){
-  gr2 <- gr
   gr <- GenomicRanges::reduce(gr)
+
+  if(length(gr) > 1){
+    gr_inv <- inverseGRanges(gr)
+    for(j in 1:length(gr_inv)){
+      N <- 0
+      value <- (GenomicRanges::end(gr_inv[j])-GenomicRanges::start(gr_inv[j]))/(GenomicRanges::end(region)-GenomicRanges::start(region))
+
+
+      if(value < 0.25){
+        N=1
+      }
+      if(value > 0.25){
+        N=2
+      }
+      if(value > 0.75){
+        N=3
+      }
+      if(value > 1){
+        N=6
+      }
+      if(value > 2){
+        N=12
+      }
+      if(as.character(strand(gr_inv[j])) == "-"){
+        arrowLine(GenomicRanges::end(gr_inv[j]),y,GenomicRanges::start(gr_inv[j]),y,n_arr=N,length=0.1)
+      }
+      if(as.character(strand(gr_inv[j])) == "+"){
+        arrowLine(GenomicRanges::start(gr_inv[j]),y,GenomicRanges::end(gr_inv[j]),y,n_arr=N,length=0.1)
+      }
+
+    }
+  }
+
   if(length(UTR5) > 0){
     plotRectangles(region,UTR5,y,size=0.25)
     if(as.character(unique(strand(gr))) == "-"){
@@ -352,38 +384,6 @@ plotGRanges <- function(gr,region,y,UTR3,UTR5){
     }
   }
   plotRectangles(region,gr,y,size=0.5)
-
-  if(length(gr) > 1){
-    gr <- inverseGRanges(gr2)
-    for(j in 1:length(gr)){
-      N <- 0
-      value <- (GenomicRanges::end(gr[j])-GenomicRanges::start(gr[j]))/(GenomicRanges::end(region)-GenomicRanges::start(region))
-
-
-      if(value < 0.25){
-        N=1
-      }
-      if(value > 0.25){
-        N=2
-      }
-      if(value > 0.75){
-        N=3
-      }
-      if(value > 1){
-        N=6
-      }
-      if(value > 2){
-        N=12
-      }
-      if(as.character(strand(gr[j])) == "-"){
-        arrowLine(GenomicRanges::end(gr[j]),y,GenomicRanges::start(gr[j]),y,n_arr=N,length=0.1)
-      }
-      if(as.character(strand(gr[j])) == "+"){
-        arrowLine(GenomicRanges::start(gr[j]),y,GenomicRanges::end(gr[j]),y,n_arr=N,length=0.1)
-      }
-
-    }
-  }
 
 }
 
@@ -408,7 +408,7 @@ plotGenomicTrack <- function(gr,UTR3,UTR5,region){
     if(length(unique(gr$external_gene_name))==1){
       graphics::plot(x=1, ylim=c(0,2),xlim=c(GenomicRanges::start(region),GenomicRanges::end(region)),xlab=GenomicRanges::seqnames(region),yaxt="n",ylab="",xaxt="n")
       graphics::axis(2, at=1, unique(gr$external_gene_name),srt=45)
-      plotGRanges(GenomicRanges::reduce(gr),region,1,UTR3,UTR5)
+      plotGRanges(gr,region,1,UTR3,UTR5)
     }
     if(length(unique(gr$external_gene_name))>1){
       graphics::plot(x=1, ylim=c(0,length(unique(gr$external_gene_name))),xlim=c(start(region),end(region)),xlab=seqnames(region),yaxt="n",ylab="")

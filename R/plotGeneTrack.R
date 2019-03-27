@@ -157,14 +157,14 @@ getBiomaRt <- function(region, genome = c("hg19", "GRCh38", "mm10")) {
 
     if (genome == "hg19") {
         m <- biomaRt::useMart(biomart = "ENSEMBL_MART_ENSEMBL",
-                               host = "grch37.ensembl.org", path = "/biomart/martservice",
-                               dataset = "hsapiens_gene_ensembl")
+                                host = "grch37.ensembl.org", path = "/biomart/martservice",
+                                dataset = "hsapiens_gene_ensembl")
     }
 
     if (genome == "GRCh38") {
         m <- biomaRt::useMart(biomart = "ENSEMBL_MART_ENSEMBL",
-                               host = "grch38.ensembl.org", path = "/biomart/martservice",
-                               dataset = "hsapiens_gene_ensembl")
+                                host = "grch38.ensembl.org", path = "/biomart/martservice",
+                                dataset = "hsapiens_gene_ensembl")
     }
     if (genome == "mm10") {
         m <- biomaRt::useMart("ensembl", dataset = "mmusculus_gene_ensembl")
@@ -229,11 +229,11 @@ plotGRanges <- function(gr, region, y, UTR3, UTR5) {
             N <- arrowNumbers(value)
             if (as.character(strand(gr_inv[j])) == "-") {
                 arrowLine(GenomicRanges::end(gr_inv[j]), y, GenomicRanges::start(gr_inv[j]), y,
-                  n_arr = N, length = 0.1)
+                n_arr = N, length = 0.1)
             }
             if (as.character(strand(gr_inv[j])) == "+") {
                 arrowLine(GenomicRanges::start(gr_inv[j]), y, GenomicRanges::end(gr_inv[j]), y,
-                  n_arr = N, length = 0.1)
+                n_arr = N, length = 0.1)
             }
         }
     }
@@ -241,14 +241,14 @@ plotGRanges <- function(gr, region, y, UTR3, UTR5) {
         plotRectangles(region, UTR5, y, size = 0.25)
         if (as.character(unique(strand(gr))) == "-") {
             GenomicRanges::end(
-               gr[queryHits(GenomicRanges::findOverlaps(gr, UTR5))]
-               ) <- GenomicRanges::start(
+                gr[queryHits(GenomicRanges::findOverlaps(gr, UTR5))]
+                ) <- GenomicRanges::start(
                     UTR5[subjectHits(GenomicRanges::findOverlaps(gr,UTR5))])
         }
         if (as.character(unique(strand(gr))) == "+") {
             GenomicRanges::start(
-               gr[queryHits(GenomicRanges::findOverlaps(gr, UTR5))]
-               ) <- GenomicRanges::end(
+                gr[queryHits(GenomicRanges::findOverlaps(gr, UTR5))]
+                ) <- GenomicRanges::end(
                     UTR5[subjectHits(GenomicRanges::findOverlaps(gr,UTR5))])
         }
     }
@@ -256,14 +256,14 @@ plotGRanges <- function(gr, region, y, UTR3, UTR5) {
         plotRectangles(region, UTR3, y, size = 0.25)
         if (as.character(unique(strand(gr))) == "+") {
             GenomicRanges::end(
-               gr[queryHits(GenomicRanges::findOverlaps(gr, UTR3))]
-               ) <- GenomicRanges::start(
+                gr[queryHits(GenomicRanges::findOverlaps(gr, UTR3))]
+                ) <- GenomicRanges::start(
                     UTR3[subjectHits(GenomicRanges::findOverlaps(gr,UTR3))])
         }
         if (as.character(unique(strand(gr))) == "-") {
             GenomicRanges::start(
-               gr[queryHits(GenomicRanges::findOverlaps(gr, UTR3))]
-               ) <- GenomicRanges::end(
+                gr[queryHits(GenomicRanges::findOverlaps(gr, UTR3))]
+                ) <- GenomicRanges::end(
                     UTR3[subjectHits(GenomicRanges::findOverlaps(gr,UTR3))])
         }
     }
@@ -323,9 +323,9 @@ plotGenomicTrack <- function(gr, UTR3, UTR5, region) {
                 index <- index + 1
                 gr2 <- gr[(GenomicRanges::elementMetadata(gr)[, "external_gene_name"] %in% i)]
                 UTR3_ind <- UTR3[(GenomicRanges::elementMetadata(UTR3)[, "external_gene_name"] %in%
-                  i)]
+                    i)]
                 UTR5_ind <- UTR5[(GenomicRanges::elementMetadata(UTR5)[, "external_gene_name"] %in%
-                  i)]
+                    i)]
                 plotGRanges(gr2, region, index - 0.5, UTR3 = UTR3_ind, UTR5 = UTR5_ind)
             }
 

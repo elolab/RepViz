@@ -4,10 +4,10 @@ author: "Thomas Faux, Kalle Rytkönen, Asta Laiho, Laura L. Elo"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{RepViz}
-  %\VignetteEncoding{UTF-8}
-  %\usepackage[UTF-8]{inputenc}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteIndexEntry{RepViz}
+    %\VignetteEncoding{UTF-8}
+    %\usepackage[UTF-8]{inputenc}
 ---
 
 ```{r setup, include=FALSE}

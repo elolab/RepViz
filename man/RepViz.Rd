@@ -5,7 +5,7 @@
 \title{Plot a genomic region}
 \usage{
 RepViz(region, genome, BAM = NULL, BED = NULL, avgTrack = TRUE,
-  geneTrack = TRUE, max = NULL, verbose = TRUE)
+    geneTrack = TRUE, max = NULL, verbose = TRUE)
 }
 \arguments{
 \item{region}{a GRange object with chr, start, end}
@@ -32,13 +32,13 @@ region <- GRanges('chr12:110938000-110940000')
 
 #Copying the files to the user working directory
 file.copy(from = list.files(system.file('extdata', package = 'RepViz'), full.names = TRUE),
-          to = getwd())
+    to = getwd())
 #Generate the visualization of the given region
 RepViz::RepViz(region = region,
-               genome = 'hg19',
-               BAM = 'BAM_input.csv',
-               BED = 'BED_input.csv',
-               avgTrack = TRUE,
-               geneTrack = TRUE)
+    genome = 'hg19',
+    BAM = 'BAM_input.csv',
+    BED = 'BED_input.csv',
+    avgTrack = TRUE,
+    geneTrack = TRUE)
 
 }

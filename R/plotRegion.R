@@ -31,14 +31,14 @@ NULL
 #'
 #' #Copying the files to the user working directory
 #' file.copy(from = list.files(system.file('extdata', package = 'RepViz'), full.names = TRUE),
-#'           to = getwd())
+#'     to = getwd())
 #' #Generate the visualization of the given region
 #' RepViz::RepViz(region = region,
-#'                genome = 'hg19',
-#'                BAM = 'BAM_input.csv',
-#'                BED = 'BED_input.csv',
-#'                avgTrack = TRUE,
-#'                geneTrack = TRUE)
+#'     genome = 'hg19',
+#'     BAM = 'BAM_input.csv',
+#'     BED = 'BED_input.csv',
+#'     avgTrack = TRUE,
+#'     geneTrack = TRUE)
 #'
 #' @export 'RepViz'
 RepViz <- function(region, genome, BAM = NULL, BED = NULL, avgTrack = TRUE, geneTrack = TRUE,

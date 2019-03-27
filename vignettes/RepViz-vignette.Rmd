@@ -62,12 +62,12 @@ Once the CSV input files are ready, the user needs to declare the region that wi
 ```{r plot_code,fig.height=10,fig.width=7,prompt=FALSE,eval = FALSE}
 region <- GRanges("chr12:110938000-110940000")
 RepViz::RepViz(region = region,
-               genome = "hg19",
-               BAM = "BAM_input.csv",
-               BED = "BED_input.csv",
-               avgTrack = TRUE,
-               geneTrack = TRUE,
-               verbose = FALSE)
+    genome = "hg19",
+    BAM = "BAM_input.csv",
+    BED = "BED_input.csv",
+    avgTrack = TRUE,
+    geneTrack = TRUE,
+    verbose = FALSE)
 
 
 
@@ -78,12 +78,12 @@ Bellow is the output of the visualization. The two upper panels show the differe
 ```{r plot_plot,fig.height=10,fig.width=7,prompt=FALSE, echo=FALSE}
 region <- GRanges("chr12:110938000-110940000")
 RepViz::RepViz(region = region,
-               genome = "hg19",
-               BAM = "BAM_input.csv",
-               BED = "BED_input.csv",
-               avgTrack = TRUE,
-               geneTrack = TRUE,
-               verbose = FALSE)
+    genome = "hg19",
+    BAM = "BAM_input.csv",
+    BED = "BED_input.csv",
+    avgTrack = TRUE,
+    geneTrack = TRUE,
+    verbose = FALSE)
 
 
 

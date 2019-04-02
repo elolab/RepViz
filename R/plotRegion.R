@@ -24,6 +24,7 @@ NULL
 #' @param geneTrack a logical indicating if the gene track should be included or not
 #' @param max a numerical vector containing the yaxis maximum value of each BAM track
 #' @param verbose a logical indicating whether the progress of the plotting is shown
+#' @return displays the region specified by the user
 #'
 #'
 #' @examples

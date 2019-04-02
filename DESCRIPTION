@@ -11,7 +11,7 @@ LazyData: true
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 Depends:
-    R (>= 3.4.0),
+    R (>= 3.5.1),
     GenomicRanges (>= 1.30.0),
     Rsamtools (>= 1.34.1),
     IRanges (>= 2.14.0),

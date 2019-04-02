@@ -29,10 +29,10 @@ NULL
 #'
 #' @examples
 #' region <- GRanges('chr12:110938000-110940000')
-#'
+#' setwd(tempdir())
 #' #Copying the files to the user working directory
 #' file.copy(from = list.files(system.file('extdata', package = 'RepViz'), full.names = TRUE),
-#'     to = getwd())
+#'     to = tempdir())
 #' #Generate the visualization of the given region
 #' RepViz::RepViz(region = region,
 #'     genome = 'hg19',

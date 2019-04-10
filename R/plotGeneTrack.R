@@ -331,7 +331,7 @@ plotGenomicTrack <- function(gr, UTR3, UTR5, region) {
 
         }
     } else {
-        print(paste0("There is no genes in the given region :", region))
+        error(paste0("There is no genes in the given region :", region))
     }
 
 }

@@ -36,7 +36,7 @@ plotBED <- function(BED, region, colorPalette, verbose) {
 
         }
     } else {
-        print(paste0("There is no overlaps with the given region :", region))
+        warning(paste0("There is no overlaps with the given region :", region))
     }
 }
 
@@ -48,7 +48,7 @@ plotBED <- function(BED, region, colorPalette, verbose) {
 
 takePeaksOverlap <- function(BED, region, verbose) {
     if (verbose == TRUE) {
-        cat("overlapping peaks with region \n")
+        message("overlapping peaks with region \n")
     }
     peaks <- loadPeaks(BED = BED, verbose)
 
@@ -71,7 +71,7 @@ takePeaksOverlap <- function(BED, region, verbose) {
 
 loadPeaks <- function(BED, verbose) {
     if (verbose == TRUE) {
-        cat("load the peak files \n")
+        message("load the peak files \n")
     }
     temp <- lapply(X = BED$files, FUN = function(x) utils::read.table(file = x, sep = "\t"))
     names(temp) <- BED$software

@@ -42,13 +42,13 @@ NULL
 #'     geneTrack = TRUE)
 #'
 #' @export 'RepViz'
-RepViz <- function(region, genome, BAM = NULL, BED = NULL, avgTrack = TRUE, geneTrack = TRUE,
+RepViz <- function(region, genome=c('hg19','hg38','mm10'), BAM = NULL, BED = NULL, avgTrack = TRUE, geneTrack = TRUE,
     max = NULL, verbose = TRUE) {
 
     # loading the files
     object_holder <- createDataObject(BAM = BAM, BED = BED, verbose = verbose)
     plots_list <- list()
-    unitTest(object_holder)
+    unitTest(object_holder,region,genome)
     colorsPalette <- defineColorPalettes(object_holder)
     # ploting the coverages
     mat <- defineLayout(object_holder, geneTrack, avgTrack)
@@ -56,7 +56,7 @@ RepViz <- function(region, genome, BAM = NULL, BED = NULL, avgTrack = TRUE, gene
     graphics::par(mar = c(2, 4, 1, 0))
     if (!is.null(BAM)) {
         if (verbose == TRUE) {
-            cat("plotting the coverages \n")
+            message("plotting the coverages \n")
         }
         layout <- makeBAMLayout(object_holder$BAM, region)
         coverages <- makeCoverages(region, layout)
@@ -76,15 +76,16 @@ RepViz <- function(region, genome, BAM = NULL, BED = NULL, avgTrack = TRUE, gene
     }
     if ("BED" %in% names(object_holder)) {
         if (verbose == TRUE) {
-            cat("plotting the BED files \n")
+            message("plotting the BED files \n")
         }
         plotBED(BED = object_holder$BED, region = region, colorsPalette[[3]], verbose)
     }
 
     if (geneTrack == TRUE) {
         if (verbose == TRUE) {
-            cat("plotting the gene track \n")
+            message("plotting the gene track \n")
         }
+        stopifnot(genome %in% c('hg19','hg38','mm10'))
         bm <- getBiomaRt(region, genome)
         UTR5 <- findUTR5(region, bm)
         UTR3 <- findUTR3(region, bm)
@@ -127,19 +128,30 @@ createDataObject <- function(BAM = NULL, BED = NULL, verbose = TRUE) {
 
     if (!is.null(BAM)) {
         if (verbose == TRUE) {
-            cat(paste0("loading the BAM related data from ", BAM, "\n"))
+            message("loading the BAM related data from ", BAM, "\n")
         }
-        files <- utils::read.table(file = BAM, sep = ",", colClasses = c("character", "character"))
-        colnames(files) <- c("files", "group")
-        return_object$BAM <- files
+        if(is.character(BAM)){
+            files <- utils::read.table(file = BAM, sep = ",", colClasses = c("character", "character"))
+            colnames(files) <- c("files", "group")
+            return_object$BAM <- files
+        }
+        if(is.data.frame(BAM)){
+            return_object$BAM <- BAM
+        }
+        
     }
     if (!is.null(BED)) {
         if (verbose == TRUE) {
-            cat(paste0("loading the BED related data from ", BED, "\n"))
+          message("loading the BED related data from ", BED, "\n")
         }
-        files <- utils::read.table(file = BED, sep = ",", colClasses = c("character", "character"))
-        colnames(files) <- c("files", "software")
-        return_object$BED <- files
+        if(is.character(BAM)){
+            files <- utils::read.table(file = BED, sep = ",", colClasses = c("character", "character"))
+            colnames(files) <- c("files", "software")
+            return_object$BED <- files
+        }
+        if(is.data.frame(BED)){
+            return_object$BED <- BED
+        }
     }
 
     return(return_object)
@@ -186,22 +198,28 @@ defineColorPalettes <- function(object) {
 
 defineLayout <- function(object_holder, geneTrack, avgTrack) {
     groups <- length(unique(object_holder$BAM$group))
-    if (geneTrack) {
-        mat <- matrix(c(seq_len((groups + 1)), groups + 2, groups + 3, rep(x = groups + 4, groups),
-            groups + 5, groups + 6, groups + 7), groups + 3, 2, byrow = FALSE)
+    
+    A <- as.numeric(geneTrack)
+    B <- as.numeric(avgTrack)
+    C <- as.numeric("BED" %in% names(object_holder))
+    sum <- A+B+C
+    
+    if (sum == 3) {
+        mat <- matrix(c(seq_len(groups), groups + 1 ,groups + 2, groups + 3, rep(x = groups + 4, groups),
+                    groups + 5, groups + 6, groups + 7), groups + 3, 2, byrow = FALSE)
     }
-    if (!avgTrack) {
-        mat <- matrix(c(seq_len((groups + 1)), groups + 2, rep(x = groups + 3, groups), groups +
-            4, groups + 5), groups + 2, 2, byrow = FALSE)
+    if (sum == 2) {
+        mat <- matrix(c(seq_len(groups), groups + 1 ,groups + 2, rep(x = groups + 3, groups),
+                    groups + 4, groups + 5 ), groups + 2, 2, byrow = FALSE)
     }
-    if (!geneTrack) {
-        mat <- matrix(c(seq_len((groups + 1)), groups + 2, rep(x = groups + 3, groups), groups +
-            4, groups + 5), groups + 2, 2, byrow = FALSE)
+    if (sum == 1) {
+        mat <- matrix(c(seq_len(groups), groups + 1 , rep(x = groups + 2, groups),
+                    groups + 3 ), groups + 1, 2, byrow = FALSE)
     }
-    if (!"BED" %in% names(object_holder)) {
-        mat <- matrix(c(seq_len((groups + 1)), groups + 2, rep(x = groups + 3, groups), groups +
-            4, groups + 5), groups + 2, 2, byrow = FALSE)
+    if (sum == 0) {
+        mat <- matrix(c(seq_len(groups) , rep(x = groups + 1, groups)), groups, 2, byrow = FALSE)
     }
+
     return(mat)
 }
 
@@ -209,20 +227,24 @@ defineLayout <- function(object_holder, geneTrack, avgTrack) {
 # @param object_holder info
 # contained in the csv input files
 
-unitTest <- function(object_holder) {
+unitTest <- function(object_holder,region,genome) {
     for (file in object_holder$BAM$files) {
         if (!file.exists(file)) {
-            cat(paste0("The file : ", file, " is not present in the indicated folder \n"))
+            simpleError(paste0("The file : ", file, " is not present in the indicated folder \n"))
         }
     }
     for (file in object_holder$BED$files) {
         if (!file.exists(file)) {
-            cat(paste0("The file : ", file, " is not present in the indicated folder \n"))
+            simpleError(paste0("The file : ", file, " is not present in the indicated folder \n"))
         }
     }
     if (!"BED" %in% names(object_holder)) {
-        cat(paste0("There is no hits found in the BED files for this region \n"))
+        message(paste0("There is no hits found in the BED files for this region \n"))
     }
+    if (class(region) != "GRanges"){
+        message(paste0("The given region is not a GRanges object \n"))
+    }
+    stopifnot(genome %in% c('hg19','hg38','mm10'))
 }
 
 # calculate the maximum number of replicates
@@ -232,10 +254,10 @@ unitTest <- function(object_holder) {
 replicatesNumber <- function(object_holder) {
     groupnb <- unique(object_holder$BAM$group)
 
-    vec <- c()
+    vec <- numeric(length(groupnb))
     for (i in groupnb) {
         len <- dim(object_holder$BAM[which(object_holder$BAM$group == i), ])[1]
-        vec <- c(vec, len)
+        vec[i] <- len
     }
 
     return(max(vec))

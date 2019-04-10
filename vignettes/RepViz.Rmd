@@ -1,0 +1,92 @@
+---
+title: "RepViz-vignette"
+author: "Thomas Faux, Kalle Rytkönen, Asta Laiho, Laura L. Elo"
+date: "`r Sys.Date()`"
+toc: True
+output: rmarkdown::html_vignette
+vignette: >
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteIndexEntry{RepViz}
+    %\VignetteEncoding{UTF-8}
+    %\usepackage[UTF-8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+suppressMessages(library(GenomicRanges))
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE)
+opts_knit$set(root.dir = system.file("extdata", package = "RepViz"))
+```
+
+## Introduction
+
+DNA sequencing has become an essential part of biomedicine and biology. Commonly, the data are analyzed with automatized pipelines. However, a visual inspection by a researcher is often useful both at the level of basic quality control and as a confirmation of the analysis results. Efficient visualization also often has an essential role in guiding the analysis design and interpretation of the results.
+In an effort to provide a simple and efficient visualization of genomic regions for the user, we have developed a replicate driven tool, RepViz. RepViz allows simultaneous viewing of both intra- and intergroup variation in sequencing counts of the studied conditions, as well as their comparison to the output features (e.g. identified peaks) from user selected data analysis methods. The RepViz tool is primarily designed for chromatin data such as ChIP-seq and ATAC-seq, but can also be used with other sequencing data such as RNA-seq, or combinations of different types of genomic data.
+
+## Before starting
+
+Before executing the commands, it will be necessary to copy the example files to a temporary file and then move the working directory to it:
+```{r download BAM,eval = FALSE}
+file.copy(from = list.files(system.file("extdata", package = "RepViz"), full.names = TRUE),to = tempdir())
+setwd(tempdir())
+```
+## The input files
+
+The tool takes two CSV files as an input. These CSV files contain the paths to the different files needed for RepViz. The first CSV file contains the file paths to the BAM files and the information about group name. The second CSV file contains the file paths to the BED files. Below is an example of a BAM input file  BAM_input.csv containing two columns, the path to the BAM files and the group name.  
+
+### The BAM input file:
+```{r input BAM, echo=FALSE}
+BAM_table <- read.table(system.file("extdata","BAM_input.csv", package = "RepViz"), sep = ",")
+colnames(BAM_table) <- c("bam file","group")
+knitr::kable(BAM_table)
+```
+
+Below is  an example of the BED_input.csv containing two columns; the path to the BED file and the name that will appear in the legend. For the purpose of this example the file contains only one line, but it can contain multiple lines.
+
+### The BED input file
+```{r input BED, echo=FALSE}
+BED_table <- read.table(system.file("extdata","BED_input.csv", package = "RepViz"), sep = ",")
+colnames(BED_table) <- c("bed file","Legend")
+knitr::kable(BED_table)
+```
+
+Note that the corresponding BAI files need to be present in the same folder with the BAM files. A BAI file is the index file of the BAM file. It takes the same name as the BAM file with an added suffix ".bai".
+
+```{r bam files, echo=FALSE}
+list.files(system.file("extdata", package = "RepViz"),pattern = ".bam")
+```
+
+## The plotting function
+
+Once the CSV input files are ready, the user needs to declare the region that will be visualized together with the genome matching the BAM and BED files. For this example we are using the region in the vicinity of the VPS29 gene. The genomes that are currently implemented are hg19, hg38 and mm10. The avgTrack and geneTrack logicals enable to control whether the gene track and average track are plotted or not.
+
+
+```{r plot_code,fig.height=10,fig.width=7,prompt=FALSE,eval = FALSE}
+region <- GRanges("chr12:110938000-110940000")
+RepViz::RepViz(region = region,
+    genome = "hg19",
+    BAM = "BAM_input.csv",
+    BED = "BED_input.csv",
+    avgTrack = TRUE,
+    geneTrack = TRUE,
+    verbose = FALSE)
+
+
+
+```
+
+Bellow is the output of the visualization. The two upper panels show the different replicates within each group,with the number of panels depending on the number of groups. The third panel shows the group averages. The fourth panel visualizes the genomic regions specified in the BED file, whereas The lowest panel shows the genomic track.
+
+```{r plot_plot,fig.height=10,fig.width=7,prompt=FALSE, echo=FALSE}
+region <- GRanges("chr12:110938000-110940000")
+RepViz::RepViz(region = region,
+    genome = "hg19",
+    BAM = "BAM_input.csv",
+    BED = "BED_input.csv",
+    avgTrack = TRUE,
+    geneTrack = TRUE,
+    verbose = FALSE)
+
+
+
+```

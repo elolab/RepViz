@@ -241,7 +241,7 @@ unitTest <- function(object_holder,region,genome) {
     if (!"BED" %in% names(object_holder)) {
         message(paste0("There is no hits found in the BED files for this region \n"))
     }
-    if (class(region) != "GRanges"){
+    if (is(object = region, class2 = "GRanges")){
         message(paste0("The given region is not a GRanges object \n"))
     }
     stopifnot(genome %in% c('hg19','hg38','mm10'))

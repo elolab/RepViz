@@ -11,11 +11,11 @@
 #               (default ENTREZ_ID)
 # @return returns a GRangesList object
 
-splitColumnByOverlap <- function(query, subject, column = "ENTREZID") {
-    olaps <- GenomicRanges::findOverlaps(query, subject)
-    f1 <- factor(S4Vectors::subjectHits(olaps), levels = seq_len(S4Vectors::subjectLength(olaps)))
-    IRanges::splitAsList(GenomicRanges::mcols(query)[[column]][S4Vectors::queryHits(olaps)], f1)
-}
+#splitColumnByOverlap <- function(query, subject, column = "ENTREZID") {
+#    olaps <- GenomicRanges::findOverlaps(query, subject)
+#    f1 <- factor(S4Vectors::subjectHits(olaps), levels = seq_len(S4Vectors::subjectLength(olaps)))
+#    IRanges::splitAsList(GenomicRanges::mcols(query)[[column]][S4Vectors::queryHits(olaps)], f1)
+#}
 
 
 # transform the dataframe in GRangesList

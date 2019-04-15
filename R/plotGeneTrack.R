@@ -4,20 +4,6 @@
 ## Medical Bioinformatics Centre
 ###############################################################################
 
-# helper function to split the genes found
-# @param query GRanges query object
-# @param subject GRanges subject
-# @param column character for the name of columns you whish to retrive
-#               (default ENTREZ_ID)
-# @return returns a GRangesList object
-
-#splitColumnByOverlap <- function(query, subject, column = "ENTREZID") {
-#    olaps <- GenomicRanges::findOverlaps(query, subject)
-#    f1 <- factor(S4Vectors::subjectHits(olaps), levels = seq_len(S4Vectors::subjectLength(olaps)))
-#    IRanges::splitAsList(GenomicRanges::mcols(query)[[column]][S4Vectors::queryHits(olaps)], f1)
-#}
-
-
 # transform the dataframe in GRangesList
 # @param df list of dataframes containing the peaks
 # @return returns a GRangesList
@@ -62,24 +48,27 @@ findGenes <- function(region, m) {
     return(gr)
 }
 
+# Helper function for the two find UTR functions
+
+f <- function(UTR) {
+  return_object <- GenomicRanges::GRanges()
+  for (gene in unique(UTR$external_gene_name)) {
+    temp <- UTR[which(UTR$external_gene_name == gene), ]
+    temp <- GenomicRanges::makeGRangesFromDataFrame(temp, keep.extra.columns = TRUE)
+    temp <- temp[queryHits(GenomicRanges::findOverlaps(temp, region, ignore.strand = TRUE))]
+    if (length(temp) > 0) {
+      temp <- temp[which(temp$transcript_length == max(temp$transcript_length))]
+    }
+    return_object <- c(return_object, temp)
+  }
+  return(return_object)
+}
+
 # find UTR overlaping with the region for the given database
 # @param region GRanges object containing the region to plot
 # @param m biomaRt object @return returns GRanges with the UTR hits found in the region
 
 findUTR5 <- function(region, m) {
-    f <- function(UTR) {
-        return_object <- GenomicRanges::GRanges()
-        for (gene in unique(UTR$external_gene_name)) {
-            temp <- UTR[which(UTR$external_gene_name == gene), ]
-            temp <- GenomicRanges::makeGRangesFromDataFrame(temp, keep.extra.columns = TRUE)
-            temp <- temp[queryHits(GenomicRanges::findOverlaps(temp, region, ignore.strand = TRUE))]
-            if (length(temp) > 0) {
-                temp <- temp[which(temp$transcript_length == max(temp$transcript_length))]
-            }
-            return_object <- c(return_object, temp)
-        }
-        return(return_object)
-    }
     filters <- c("chromosome_name", "start", "end")
     chr <- substr(as.character(seqnames(region)), 4, nchar(as.character(seqnames(region))))
     values <- list(chr, GenomicRanges::start(region), GenomicRanges::end(region))
@@ -102,19 +91,6 @@ findUTR5 <- function(region, m) {
 
 
 findUTR3 <- function(region, m) {
-    f <- function(UTR) {
-        return_object <- GenomicRanges::GRanges()
-        for (gene in unique(UTR$external_gene_name)) {
-            temp <- UTR[which(UTR$external_gene_name == gene), ]
-            temp <- GenomicRanges::makeGRangesFromDataFrame(temp, keep.extra.columns = TRUE)
-            temp <- temp[queryHits(GenomicRanges::findOverlaps(temp, region, ignore.strand = TRUE))]
-            if (length(temp) > 0) {
-                temp <- temp[which(temp$transcript_length == max(temp$transcript_length))]
-            }
-            return_object <- c(return_object, temp)
-        }
-        return(return_object)
-    }
     filters <- c("chromosome_name", "start", "end")
     chr <- substr(as.character(seqnames(region)), 4, nchar(as.character(seqnames(region))))
     values <- list(chr, GenomicRanges::start(region), GenomicRanges::end(region))
@@ -141,20 +117,26 @@ findUTR3 <- function(region, m) {
 
 getBiomaRt <- function(region, genome = c("hg19", "GRCh38", "mm10")) {
 
-    if (genome == "hg19") {
-        m <- biomaRt::useMart(biomart = "ENSEMBL_MART_ENSEMBL",
-                                host = "grch37.ensembl.org", path = "/biomart/martservice",
-                                dataset = "hsapiens_gene_ensembl")
-    }
-
-    if (genome == "GRCh38") {
-        m <- biomaRt::useMart(biomart = "ENSEMBL_MART_ENSEMBL",
-                                host = "grch38.ensembl.org", path = "/biomart/martservice",
-                                dataset = "hsapiens_gene_ensembl")
-    }
-    if (genome == "mm10") {
-        m <- biomaRt::useMart("ensembl", dataset = "mmusculus_gene_ensembl")
-    }
+  switch(genome, 
+         hg19={
+             m <- biomaRt::useMart(biomart = "ENSEMBL_MART_ENSEMBL",
+                                 host = "grch37.ensembl.org", path = "/biomart/martservice",
+                                 dataset = "hsapiens_gene_ensembl")
+         },
+         GRCh38={
+             m <- biomaRt::useMart(biomart = "ENSEMBL_MART_ENSEMBL",
+                                 host = "grch38.ensembl.org", path = "/biomart/martservice",
+                                 dataset = "hsapiens_gene_ensembl")  
+         },
+         mm10={
+             m <- biomaRt::useMart("ensembl", dataset = "mmusculus_gene_ensembl")  
+         },
+         {
+             m <- biomaRt::useMart(biomart = "ENSEMBL_MART_ENSEMBL",
+                                 host = "grch37.ensembl.org", path = "/biomart/martservice",
+                                 dataset = "hsapiens_gene_ensembl")
+         }
+  )
 
     return(m)
 }

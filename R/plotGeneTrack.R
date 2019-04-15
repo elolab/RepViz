@@ -241,6 +241,7 @@ plotGRanges <- function(gr, region, y, UTR3, UTR5) {
 
 arrowNumbers <- function(value) {
     N <- 0
+
     if (value < 0.25) {
         N = 1
     }
@@ -299,7 +300,7 @@ plotGenomicTrack <- function(gr, UTR3, UTR5, region) {
 
         }
     } else {
-        error(paste0("There is no genes in the given region :", region))
+        stop("There is no genes in the given region :", region)
     }
 
 }

@@ -232,19 +232,19 @@ defineLayout <- function(object_holder, geneTrack, avgTrack) {
 unitTest <- function(object_holder,region,genome) {
     for (file in object_holder$BAM$files) {
         if (!file.exists(file)) {
-            simpleError(paste0("The file : ", file, " is not present in the indicated folder \n"))
+            stop("The file : ", file, " is not present in the indicated folder \n")
         }
     }
     for (file in object_holder$BED$files) {
         if (!file.exists(file)) {
-            simpleError(paste0("The file : ", file, " is not present in the indicated folder \n"))
+            stop("The file : ", file, " is not present in the indicated folder \n")
         }
     }
     if (!"BED" %in% names(object_holder)) {
-        message(paste0("There is no hits found in the BED files for this region \n"))
+        message("There is no hits found in the BED files for this region \n")
     }
     if (is(object = region, class2 = "GRanges")){
-        message(paste0("The given region is not a GRanges object \n"))
+        message("The given region is not a GRanges object \n")
     }
     stopifnot(genome %in% c('hg19','hg38','mm10'))
 }

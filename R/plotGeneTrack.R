@@ -245,13 +245,13 @@ arrowNumbers <- function(value) {
     if (value < 0.25) {
         N = 1
     }
-    if (value > 0.25) {
+    if ((value > 0.25) & (value <= 0.75)) {
         N = 2
     }
-    if (value > 0.75) {
+    if ((value > 0.75) & (value <= 1)) {
         N = 3
     }
-    if (value > 1) {
+    if ((value > 1) & (value <= 2)) {
         N = 6
     }
     if (value > 2) {

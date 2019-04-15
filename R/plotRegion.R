@@ -127,30 +127,30 @@ createDataObject <- function(BAM = NULL, BED = NULL, verbose = TRUE) {
     return_object <- list()
 
     if (!is.null(BAM)) {
-        if (verbose == TRUE) {
-            message("loading the BAM related data from ", BAM, "\n")
-        }
+        if (verbose == TRUE)  message("loading the BAM related data from ", BAM, "\n")
+      
         if(is.character(BAM)){
             files <- utils::read.table(file = BAM, sep = ",", colClasses = c("character", "character"))
             colnames(files) <- c("files", "group")
             return_object$BAM <- files
-        }
-        if(is.data.frame(BAM)){
+        } else if(is.data.frame(BAM)){
             return_object$BAM <- BAM
+        } else {
+            stop("BAM is not character or data.frame")
         }
-        
+      
     }
     if (!is.null(BED)) {
-        if (verbose == TRUE) {
-          message("loading the BED related data from ", BED, "\n")
-        }
+        if (verbose == TRUE) message("loading the BED related data from ", BED, "\n")
+      
         if(is.character(BAM)){
             files <- utils::read.table(file = BED, sep = ",", colClasses = c("character", "character"))
             colnames(files) <- c("files", "software")
             return_object$BED <- files
-        }
-        if(is.data.frame(BED)){
+        } else if(is.data.frame(BED)){
             return_object$BED <- BED
+        } else {
+            stop("BED is not character or data.frame")
         }
     }
 

@@ -4,20 +4,6 @@
 ## Medical Bioinformatics Centre
 ###############################################################################
 
-# get the genes as GRanges
-# @param db object of the type BSgenome.Hsapiens.UCSC.hg19
-# @param column character, name of the column you wish to retrive (default ENTREZ_ID)
-# @return returns a GRanges of genes
-
-geneRanges <- function(db, column = "ENTREZID") {
-    g <- genes(db, columns = column)
-    col <- mcols(g)[[column]]
-    genes <- granges(g)[rep(seq_along(g), IRanges::elementNROWS(col))]
-    mcols(genes)[[column]] <- as.character(unlist(col))
-    genes
-}
-
-
 # helper function to split the genes found
 # @param query GRanges query object
 # @param subject GRanges subject

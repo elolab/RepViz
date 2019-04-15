@@ -58,7 +58,7 @@ RepViz <- function(region, genome=c('hg19','hg38','mm10'), BAM = NULL, BED = NUL
         if (verbose == TRUE) {
             message("plotting the coverages \n")
         }
-        layout <- makeBAMLayout(object_holder$BAM, region)
+        layout <- makeBAMLayout(object_holder$BAM)
         coverages <- makeCoverages(region, layout)
         if (is.null(max)) {
             max <- rep(max(as.numeric(names(table(unlist(coverages))))), length(unique(object_holder$BAM$group)))

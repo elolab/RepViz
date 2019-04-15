@@ -204,21 +204,24 @@ defineLayout <- function(object_holder, geneTrack, avgTrack) {
     C <- as.numeric("BED" %in% names(object_holder))
     sum <- A+B+C
     
-    if (sum == 3) {
-        mat <- matrix(c(seq_len(groups), groups + 1 ,groups + 2, groups + 3, rep(x = groups + 4, groups),
-                    groups + 5, groups + 6, groups + 7), groups + 3, 2, byrow = FALSE)
-    }
-    if (sum == 2) {
-        mat <- matrix(c(seq_len(groups), groups + 1 ,groups + 2, rep(x = groups + 3, groups),
-                    groups + 4, groups + 5 ), groups + 2, 2, byrow = FALSE)
-    }
-    if (sum == 1) {
-        mat <- matrix(c(seq_len(groups), groups + 1 , rep(x = groups + 2, groups),
-                    groups + 3 ), groups + 1, 2, byrow = FALSE)
-    }
-    if (sum == 0) {
-        mat <- matrix(c(seq_len(groups) , rep(x = groups + 1, groups)), groups, 2, byrow = FALSE)
-    }
+    switch(as.character(sum),
+        "0" = {
+            mat <- matrix(c(seq_len(groups) , rep(x = groups + 1, groups)), groups, 2, byrow = FALSE)
+        },
+        "1" = {
+            mat <- matrix(c(seq_len(groups), groups + 1 , rep(x = groups + 2, groups),
+                          groups + 3 ), groups + 1, 2, byrow = FALSE) 
+        },
+        "2" = {
+            mat <- matrix(c(seq_len(groups), groups + 1 ,groups + 2, rep(x = groups + 3, groups),
+                          groups + 4, groups + 5 ), groups + 2, 2, byrow = FALSE)
+        },
+        "3" = {
+            mat <- matrix(c(seq_len(groups), groups + 1 ,groups + 2, groups + 3, rep(x = groups + 4, groups),
+                          groups + 5, groups + 6, groups + 7), groups + 3, 2, byrow = FALSE)
+        }
+      
+    )
 
     return(mat)
 }

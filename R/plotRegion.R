@@ -85,7 +85,6 @@ RepViz <- function(region, genome=c('hg19','hg38','mm10'), BAM = NULL, BED = NUL
         if (verbose == TRUE) {
             message("plotting the gene track \n")
         }
-        stopifnot(genome %in% c('hg19','hg38','mm10'))
         bm <- getBiomaRt(region, genome)
         UTR5 <- findUTR5(region, bm)
         UTR3 <- findUTR3(region, bm)

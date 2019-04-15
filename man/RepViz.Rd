@@ -4,8 +4,9 @@
 \alias{RepViz}
 \title{Plot a genomic region}
 \usage{
-RepViz(region, genome, BAM = NULL, BED = NULL, avgTrack = TRUE,
-    geneTrack = TRUE, max = NULL, verbose = TRUE)
+RepViz(region, genome = c("hg19", "hg38", "mm10"), BAM = NULL,
+  BED = NULL, avgTrack = TRUE, geneTrack = TRUE, max = NULL,
+  verbose = TRUE)
 }
 \arguments{
 \item{region}{a GRange object with chr, start, end}
@@ -24,15 +25,18 @@ RepViz(region, genome, BAM = NULL, BED = NULL, avgTrack = TRUE,
 
 \item{verbose}{a logical indicating whether the progress of the plotting is shown}
 }
+\value{
+displays the region specified by the user
+}
 \description{
 Plot a genomic region
 }
 \examples{
 region <- GRanges('chr12:110938000-110940000')
-
+setwd(tempdir())
 #Copying the files to the user working directory
 file.copy(from = list.files(system.file('extdata', package = 'RepViz'), full.names = TRUE),
-    to = getwd())
+    to = tempdir())
 #Generate the visualization of the given region
 RepViz::RepViz(region = region,
     genome = 'hg19',

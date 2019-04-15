@@ -36,10 +36,9 @@ getCoverage <- function(region, bamfile) {
 
 # create the layout from the BAM info
 # @param BAM list path to the BAM files
-# @param region vector of coordiantes of the region, chromosom, start and end
 # @return returns a vector with
 
-makeBAMLayout <- function(BAM, region) {
+makeBAMLayout <- function(BAM) {
     return_object <- list()
 
     for (i in unique(BAM$group)) {

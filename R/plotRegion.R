@@ -24,6 +24,7 @@ NULL
 #' @param geneTrack a logical indicating if the gene track should be included or not
 #' @param max a numerical vector containing the yaxis maximum value of each BAM track
 #' @param verbose a logical indicating whether the progress of the plotting is shown
+#' @param cex number indicating the amount by which plotting text and symbols should be scaled relative to the default. 
 #' @return displays the region specified by the user
 #'
 #'
@@ -43,7 +44,7 @@ NULL
 #'
 #' @export 'RepViz'
 RepViz <- function(region, genome=c('hg19','hg38','mm10'), BAM = NULL, BED = NULL, avgTrack = TRUE, geneTrack = TRUE,
-    max = NULL, verbose = TRUE) {
+    max = NULL, verbose = TRUE, cex = 1) {
 
     # loading the files
     object_holder <- createDataObject(BAM = BAM, BED = BED, verbose = verbose)
@@ -53,7 +54,7 @@ RepViz <- function(region, genome=c('hg19','hg38','mm10'), BAM = NULL, BED = NUL
     # ploting the coverages
     mat <- defineLayout(object_holder, geneTrack, avgTrack)
     layout(mat, widths = c(5, 1))
-    graphics::par(mar = c(2, 4, 1, 0))
+    graphics::par(mar = c(2, 6, 1, 0))
     if (!is.null(BAM)) {
         if (verbose == TRUE) {
             message("plotting the coverages \n")
@@ -66,11 +67,11 @@ RepViz <- function(region, genome=c('hg19','hg38','mm10'), BAM = NULL, BED = NUL
 
         for (group in seq_len(length(unique(object_holder$BAM$group)))) {
             plotBAM(region, coverages[[group]], max[group], unique(object_holder$BAM$group)[group],
-                colorsPalette[[1]])
+                colorsPalette[[1]], cex)
         }
 
         if (avgTrack == TRUE) {
-            plotAverageBAM(region, coverages, unique(object_holder$BAM$group), colorsPalette[[2]])
+            plotAverageBAM(region, coverages, unique(object_holder$BAM$group), colorsPalette[[2]], cex)
         }
 
     }
@@ -89,30 +90,30 @@ RepViz <- function(region, genome=c('hg19','hg38','mm10'), BAM = NULL, BED = NUL
         UTR5 <- findUTR5(region, bm)
         UTR3 <- findUTR3(region, bm)
         gr <- findGenes(region, bm)
-        plotGenomicTrack(gr = gr, UTR3 = UTR3, UTR5 = UTR5, region)
+        plotGenomicTrack(gr = gr, UTR3 = UTR3, UTR5 = UTR5, region, cex)
     }
     graphics::par(mar = c(1, 1, 1, 1))
     graphics::plot.new()
-    plotLegends(object_holder = object_holder, colorsPalette = colorsPalette, avgTrack = avgTrack, BED = BED)
+    plotLegends(object_holder = object_holder, colorsPalette = colorsPalette, avgTrack = avgTrack, BED = BED, cex)
     graphics::par(mfrow = c(1, 1))
 }
 
-plotLegends <- function(object_holder, colorsPalette, avgTrack, BED) {
+plotLegends <- function(object_holder, colorsPalette, avgTrack, BED, cex) {
     legend("left", legend = seq_len(replicatesNumber(object_holder)),
-        col = colorsPalette[[1]], lty = 1, lwd = 2, box.col = "white", bg = "white")
+        col = colorsPalette[[1]], lty = 1, lwd = cex, box.col = "white", bg = "white", cex = cex,  text.font  = 2)
 
     if (avgTrack) {
         graphics::plot.new()
         graphics::legend("left", legend = unique(object_holder$BAM$group),
                         col = colorsPalette[[2]][2:length(colorsPalette[[2]])],
-                        lty = 1, lwd = 2, box.col = "white", bg = "white")
+                        lty = 1, lwd = cex, box.col = "white", bg = "white", cex = cex,  text.font  = 2)
     }
 
     if (!is.null(BED)) {
         graphics::plot.new()
         graphics::legend("left", legend = rev(object_holder$BED$software),
                         col = rev(colorsPalette[[3]][seq_len(length(object_holder$BED$software))]),
-                        lty = 1, lwd = 2, box.col = "white", bg = "white")
+                        lty = 1, lwd = cex, box.col = "white", bg = "white", cex = cex,  text.font  = 2)
     }
 
 }
@@ -243,7 +244,7 @@ unitTest <- function(object_holder,region,genome) {
     if (!"BED" %in% names(object_holder)) {
         message("There is no hits found in the BED files for this region \n")
     }
-    if (is(object = region, class2 = "GRanges")){
+    if (!is(object = region, class2 = "GRanges")){
         message("The given region is not a GRanges object \n")
     }
     stopifnot(genome %in% c('hg19','hg38','mm10'))

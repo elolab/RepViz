@@ -53,7 +53,7 @@ makeBAMLayout <- function(BAM) {
 # @param conditions vector of names of the different conditions
 # @param colorPalette vector that contain the colors to be used for each line
 
-plotAverageBAM <- function(region, coverages, conditions, colorPalette) {
+plotAverageBAM <- function(region, coverages, conditions, colorPalette, cex) {
     average_cov <- data.frame(GenomicRanges::start(region):GenomicRanges::end(region))
     for (i in seq_len(length(coverages))) {
         coverage <- cbind(as.data.frame(coverages[[i]]))
@@ -62,7 +62,8 @@ plotAverageBAM <- function(region, coverages, conditions, colorPalette) {
     max <- max(as.numeric(names(table(unlist(average_cov[, -1])))))
     colnames(average_cov) <- c("position", sprintf("condition%02d", seq(1, length(coverages))))
     graphics::plot(1, xlim = c(GenomicRanges::start(region), GenomicRanges::end(region)), ylim = c(0,
-        max), main = "", ylab = "Average coverage", xlab = "", xaxt = "n")
+        max), main = "", ylab = "", xlab = "", xaxt = "n",font=2,cex = cex)
+    graphics::mtext(side=2, line=3, "Average coverage", col="black", font=2, cex=cex)
     for (i in 2:length(average_cov)) {
         graphics::lines(average_cov[, "position"], average_cov[, i], col = colorPalette[i], lwd = 2)
     }
@@ -75,11 +76,12 @@ plotAverageBAM <- function(region, coverages, conditions, colorPalette) {
 # @param colorPalette vector that contain the colors to be used for each line
 # @param max numeric Ordinate maximum for ylim
 
-plotBAM <- function(region, coverages, max, condition, colorPalette) {
+plotBAM <- function(region, coverages, max, condition, colorPalette, cex) {
     coverage <- cbind(as.data.frame(coverages), GenomicRanges::start(region):GenomicRanges::end(region))
     colnames(coverage) <- c(sprintf("rep%02d", seq(1, length(coverages))), "position")
     graphics::plot(1, xlim = c(GenomicRanges::start(region), GenomicRanges::end(region)), ylim = c(0,
-        max), main = "", ylab = condition, xlab = "", xaxt = "n")
+        max), main = "", ylab = "", xlab = "", xaxt = "n",font=2,cex = cex)
+    graphics::mtext(side=2, line=3, condition, col="black", font=2, cex=cex)
     for (i in seq_len((length(coverage) - 1))) {
         graphics::lines(coverage[, "position"], coverage[, i], col = colorPalette[i])
     }

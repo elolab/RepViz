@@ -50,7 +50,7 @@ findGenes <- function(region, m) {
 
 # Helper function for the two find UTR functions
 
-f <- function(UTR) {
+f <- function(UTR,region) {
   return_object <- GenomicRanges::GRanges()
   for (gene in unique(UTR$external_gene_name)) {
     temp <- UTR[which(UTR$external_gene_name == gene), ]
@@ -81,7 +81,7 @@ findUTR5 <- function(region, m) {
     UTR5 <- map[!is.na(map$`5_utr_start`), ]
     if (dim(UTR5)[1] > 0) {
         UTR5$chromosome_name <- as.character(GenomicRanges::seqnames(region))
-        UTR5 <- f(UTR5)
+        UTR5 <- f(UTR5,region)
 
     } else {
         UTR5 <- GenomicRanges::GRanges()
@@ -103,7 +103,7 @@ findUTR3 <- function(region, m) {
     UTR3 <- map[!is.na(map$`3_utr_start`), ]
     if (dim(UTR3)[1] > 0) {
         UTR3$chromosome_name <- as.character(GenomicRanges::seqnames(region))
-        UTR3 <- f(UTR3)
+        UTR3 <- f(UTR3,region)
     } else {
         UTR3 <- GenomicRanges::GRanges()
     }
@@ -264,7 +264,7 @@ arrowNumbers <- function(value) {
 # @param gr GRanges object containing the region to plot
 # @param region GRanges object containing the region to plot
 
-plotGenomicTrack <- function(gr, UTR3, UTR5, region) {
+plotGenomicTrack <- function(gr, UTR3, UTR5, region, cex) {
 
     if (dim(as.data.frame(gr))[1] > 0) {
         index <- 0
@@ -274,7 +274,9 @@ plotGenomicTrack <- function(gr, UTR3, UTR5, region) {
                 GenomicRanges::end(region)),
                 xlab = GenomicRanges::seqnames(region), yaxt = "n", ylab = "",
                 xaxt = "n")
-            graphics::axis(2, at = 1, unique(gr$external_gene_name), srt = 45)
+            graphics::axis(2, at = 1, labels = FALSE)
+            graphics::text(x = par()$usr[1] - 0.03 * (par()$usr[2] - par()$usr[1]), 
+                           y = 1, labels = unique(gr$external_gene_name),srt = 90, xpd = NA, font=2, cex= cex)
             plotGRanges(gr, region, 1, UTR3, UTR5)
         }
         if (length(unique(gr$external_gene_name)) > 1) {
@@ -287,7 +289,7 @@ plotGenomicTrack <- function(gr, UTR3, UTR5, region) {
             lab <- IRanges::unique(gr$external_gene_name)
             graphics::axis(2, at = tlab, labels = FALSE)
             graphics::text(x = par()$usr[1] - 0.01 * (par()$usr[2] - par()$usr[1]), y = tlab,
-                labels = lab, srt = 45, xpd = NA, adj = 1)
+                labels = lab, srt = 45, xpd = NA, adj = 1, font=2, cex = cex)
             for (i in unique(gr$external_gene_name)) {
                 index <- index + 1
                 gr2 <- gr[(GenomicRanges::elementMetadata(gr)[, "external_gene_name"] %in% i)]

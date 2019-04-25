@@ -6,7 +6,7 @@
 \usage{
 RepViz(region, genome = c("hg19", "hg38", "mm10"), BAM = NULL,
   BED = NULL, avgTrack = TRUE, geneTrack = TRUE, max = NULL,
-  verbose = TRUE)
+  verbose = TRUE, cex = 1)
 }
 \arguments{
 \item{region}{a GRange object with chr, start, end}
@@ -24,6 +24,8 @@ RepViz(region, genome = c("hg19", "hg38", "mm10"), BAM = NULL,
 \item{max}{a numerical vector containing the yaxis maximum value of each BAM track}
 
 \item{verbose}{a logical indicating whether the progress of the plotting is shown}
+
+\item{cex}{number indicating the amount by which plotting text and symbols should be scaled relative to the default.}
 }
 \value{
 displays the region specified by the user

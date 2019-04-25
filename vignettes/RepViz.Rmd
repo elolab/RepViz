@@ -85,7 +85,8 @@ RepViz::RepViz(region = region,
     BED = "BED_input.csv",
     avgTrack = TRUE,
     geneTrack = TRUE,
-    verbose = FALSE)
+    verbose = FALSE,
+    cex=1)
 
 
 

@@ -14,7 +14,7 @@
 #' @importFrom utils read.table
 NULL
 
-#' Plot a genomic region
+#' Plot a genomic region 
 #'
 #' @param region a GRange object with chr, start, end
 #' @param genome a character vector 'hg19','hg38' or 'mm10'

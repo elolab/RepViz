@@ -6,3 +6,10 @@ CHANGES IN VERSION 0.99.14
   + Implementation of the last comments from reviewers
 
 
+CHANGES IN VERSION 0.99.26
+-------------------------
+  
+  RELEASE
+
+  + Correction of a visual bug that appeared when there is low signal. This was due to the fact that the coverage was stopping at the last read instead of at the end of the window. As the result the lines of signal on the plot appeared cutted.
+

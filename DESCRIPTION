@@ -1,7 +1,7 @@
 Package: RepViz 
 Type: Package
 Title: Replicate oriented Visualization of a genomic region
-Version: 0.99.25
+Version: 0.99.26
 Author: Thomas Faux, Kalle Rytkönen, Asta Laiho, Laura L. Elo
 Maintainer: Thomas Faux, Asta Laiho <faux.thomas1@gmail.com> <asta.laiho@utu.fi>
 Description: RepViz enables the view of a genomic region in a simple and 

@@ -25,6 +25,7 @@ NULL
 #' @param max a numerical vector containing the yaxis maximum value of each BAM track
 #' @param verbose a logical indicating whether the progress of the plotting is shown
 #' @param cex number indicating the amount by which plotting text and symbols should be scaled relative to the default. 
+#' @param col vector of character user can set color of the different BED tracks
 #' @return displays the region specified by the user
 #'
 #'
@@ -44,7 +45,7 @@ NULL
 #'
 #' @export 'RepViz'
 RepViz <- function(region, genome=c('hg19','hg38','mm10'), BAM = NULL, BED = NULL, avgTrack = TRUE, geneTrack = TRUE,
-    max = NULL, verbose = TRUE, cex = 1) {
+    max = NULL, verbose = TRUE, cex = 1,col = NULL) {
 
     # loading the files
     object_holder <- createDataObject(BAM = BAM, BED = BED, verbose = verbose)
@@ -79,7 +80,12 @@ RepViz <- function(region, genome=c('hg19','hg38','mm10'), BAM = NULL, BED = NUL
         if (verbose == TRUE) {
             message("plotting the BED files \n")
         }
-        plotBED(BED = object_holder$BED, region = region, colorsPalette[[3]], verbose)
+      if(!is.null(col)){
+        colors <- col
+      }else{
+        colors <- colorsPalette[[3]]
+      }
+        plotBED(BED = object_holder$BED, region = region, colors, verbose)
     }
 
     if (geneTrack == TRUE) {
@@ -94,11 +100,11 @@ RepViz <- function(region, genome=c('hg19','hg38','mm10'), BAM = NULL, BED = NUL
     }
     graphics::par(mar = c(1, 1, 1, 1))
     graphics::plot.new()
-    plotLegends(object_holder = object_holder, colorsPalette = colorsPalette, avgTrack = avgTrack, BED = BED, cex)
+    plotLegends(object_holder = object_holder, colorsPalette = colorsPalette, avgTrack = avgTrack, BED = BED, cex, col)
     graphics::par(mfrow = c(1, 1))
 }
 
-plotLegends <- function(object_holder, colorsPalette, avgTrack, BED, cex) {
+plotLegends <- function(object_holder, colorsPalette, avgTrack, BED, cex, col) {
     legend("left", legend = seq_len(replicatesNumber(object_holder)),
         col = colorsPalette[[1]], lty = 1, lwd = cex, box.col = "white", bg = "white", cex = cex,  text.font  = 2)
 
@@ -110,9 +116,14 @@ plotLegends <- function(object_holder, colorsPalette, avgTrack, BED, cex) {
     }
 
     if (!is.null(BED)) {
+      if(!is.null(col)){
+        colors <- col[length(col):1]
+      }else{
+        colors <- rev(colorsPalette[[3]][seq_len(length(object_holder$BED$software))])
+      }
         graphics::plot.new()
         graphics::legend("left", legend = rev(object_holder$BED$software),
-                        col = rev(colorsPalette[[3]][seq_len(length(object_holder$BED$software))]),
+                        col = colors,
                         lty = 1, lwd = cex, box.col = "white", bg = "white", cex = cex,  text.font  = 2)
     }
 

@@ -26,6 +26,8 @@ RepViz(region, genome = c("hg19", "hg38", "mm10"), BAM = NULL,
 \item{verbose}{a logical indicating whether the progress of the plotting is shown}
 
 \item{cex}{number indicating the amount by which plotting text and symbols should be scaled relative to the default.}
+
+\item{col}{ vector of character user can set color of the different BED tracks.}
 }
 \value{
 displays the region specified by the user

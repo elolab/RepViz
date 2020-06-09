@@ -42,7 +42,9 @@ findGenes <- function(region, m) {
 
     map[which(map$strand == -1), "strand"] <- "-"
     map[which(map$strand == 1), "strand"] <- "+"
-    map$chromosome_name <- as.character(GenomicRanges::seqnames(region))
+    if(dim(map)[1] > 0){
+      map$chromosome_name <- as.character(GenomicRanges::seqnames(region))  
+    }
     gr <- GenomicRanges::makeGRangesFromDataFrame(map,
                                         keep.extra.columns = TRUE)
     return(gr)
@@ -302,7 +304,12 @@ plotGenomicTrack <- function(gr, UTR3, UTR5, region, cex) {
 
         }
     } else {
-        stop("There is no genes in the given region :", region)
+        message("There is no genes in the given region :", region)
+        graphics::plot(x = 1, ylim = c(0, 2),
+                     xlim = c(GenomicRanges::start(region),
+                              GenomicRanges::end(region)),
+                     xlab = GenomicRanges::seqnames(region), yaxt = "n", ylab = "",
+                     xaxt = "n")
     }
 
 }
